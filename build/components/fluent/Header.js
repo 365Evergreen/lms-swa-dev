@@ -1,13 +1,14 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useEffect, useState } from 'react';
 import { useMsal } from '@azure/msal-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 import hiredLogo from '../../assets/HiRED-logo-red.png';
 import styles from './Header.module.css';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import ChevronDown24Regular from './ChevronDown24Regular';
 import './NavigationMenuRadix.css';
 import { fetchMenuItems } from '../../utils/dataverseMenu';
+import { fetchWordPressMenu } from '../../utils/wordpressMenu';
 // Hardcoded parent items
 const PARENTS = ['Topics', 'Courses', 'Pathways', 'Community', 'Resources'];
 const Header = () => {
@@ -25,16 +26,33 @@ const Header = () => {
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
     useEffect(() => {
-        fetchMenuItems()
-            .then(items => {
-            setMenuItems(items);
-            setLoading(false);
-        })
-            .catch(_err => {
-            setError('Failed to load menu items');
-            setLoading(false);
-        });
-    }, []);
+        setLoading(true);
+        setError(null);
+        if (!accounts || accounts.length === 0) {
+            // Anonymous: fetch WordPress menu
+            fetchWordPressMenu()
+                .then(items => {
+                setMenuItems(items);
+                setLoading(false);
+            })
+                .catch(err => {
+                setError('Failed to load menu items');
+                setLoading(false);
+            });
+        }
+        else {
+            // Authenticated: fetch Dataverse menu
+            fetchMenuItems()
+                .then(items => {
+                setMenuItems(items);
+                setLoading(false);
+            })
+                .catch(err => {
+                setError('Failed to load menu items');
+                setLoading(false);
+            });
+        }
+    }, [accounts]);
     // If authenticated, redirect to landing page
     useEffect(() => {
         if (accounts && accounts.length > 0) {
@@ -42,8 +60,15 @@ const Header = () => {
         }
     }, [accounts, navigate]);
     return (_jsx("header", { className: scrolled ? `${styles.header} ${styles.headerScrolled}` : styles.header, children: _jsxs("div", { className: styles['header-content'], children: [_jsxs("div", { className: styles['header-left'], children: [_jsx("img", { src: hiredLogo, alt: "HiRED logo", className: styles['header-logo'] }), _jsx("span", { className: styles['header-title'], children: "Learn" })] }), _jsxs("div", { className: styles['header-right'], children: [_jsx(NavigationMenu.Root, { orientation: "horizontal", children: _jsx(NavigationMenu.List, { className: styles['header-nav'], children: PARENTS.map((parent) => {
-                                    const children = menuItems.filter(item => item.Parent === parent);
-                                    return (_jsxs(NavigationMenu.Item, { className: styles['header-link'], children: [_jsxs(NavigationMenu.Trigger, { className: styles['header-trigger'], "aria-label": `Show submenu for ${parent}`, children: [_jsx("span", { className: styles['header-trigger-label'], children: parent }), _jsx("span", { className: styles['header-trigger-chevron'], children: _jsx(ChevronDown24Regular, {}) })] }), _jsx(NavigationMenu.Content, { className: styles['megamenu'], children: _jsxs("div", { className: styles['megamenu-content'], role: "menu", children: [loading && _jsx("div", { children: "Loading..." }), error && _jsx("div", { style: { color: 'red' }, children: error }), _jsx("ul", { children: children.map(child => (_jsxs("li", { role: "menuitem", tabIndex: 0, children: [child.Icon && _jsx("img", { src: child.Icon, alt: "", style: { width: 20, height: 20, marginRight: 8 } }), child.Name] }, child.Name))) })] }) })] }, parent));
+                                    // Authenticated: Dataverse menu
+                                    if (accounts && accounts.length > 0) {
+                                        const children = menuItems.filter(item => item.hired_parent === parent);
+                                        return (_jsxs(NavigationMenu.Item, { className: styles['header-link'], children: [_jsxs(NavigationMenu.Trigger, { className: styles['header-trigger'], "aria-label": `Show submenu for ${parent}`, children: [_jsx("span", { className: styles['header-trigger-label'], children: parent }), _jsx("span", { className: styles['header-trigger-chevron'], children: _jsx(ChevronDown24Regular, {}) })] }), _jsx(NavigationMenu.Content, { className: styles['megamenu'], children: _jsxs("div", { className: styles['megamenu-content'], role: "menu", children: [loading && _jsx("div", { children: "Loading..." }), error && _jsx("div", { style: { color: 'red' }, children: error }), _jsx("ul", { children: children.map(child => (_jsxs(NavLink, { to: `/${child.hired_route}`, className: ({ isActive }) => `${styles['megamenu-item']} ${isActive ? styles['active-link'] : ''}`, style: { display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit', position: 'relative', cursor: 'pointer' }, children: [child.hired_icon && (_jsx("img", { src: child.hired_icon, alt: "", style: { width: 20, height: 20, marginRight: 8 } })), _jsx("span", { children: child.hired_name })] }, child.hired_lmsmenuitemid))) })] }) })] }, parent));
+                                    }
+                                    else {
+                                        // Anonymous: WordPress menu
+                                        return (_jsxs(NavigationMenu.Item, { className: styles['header-link'], children: [_jsxs(NavigationMenu.Trigger, { className: styles['header-trigger'], "aria-label": `Show submenu for ${parent}`, children: [_jsx("span", { className: styles['header-trigger-label'], children: parent }), _jsx("span", { className: styles['header-trigger-chevron'], children: _jsx(ChevronDown24Regular, {}) })] }), _jsx(NavigationMenu.Content, { className: styles['megamenu'], children: _jsxs("div", { className: styles['megamenu-content'], role: "menu", children: [loading && _jsx("div", { children: "Loading..." }), error && _jsx("div", { style: { color: 'red' }, children: error }), _jsx("ul", { children: menuItems.filter(item => item.label === parent).flatMap(item => item.childItems || []).map(child => (_jsx("li", { className: styles['megamenu-item'], style: { display: 'flex', alignItems: 'center', cursor: 'pointer' }, children: _jsxs("a", { href: child.url, target: "_blank", rel: "noopener noreferrer", style: { display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }, children: [_jsx("span", { style: { marginRight: 8, fontSize: 18 }, children: "\uD83D\uDC4D" }), _jsx("span", { children: child.label })] }) }, child.id))) })] }) })] }, parent));
+                                    }
                                 }) }) }), (!accounts || accounts.length === 0) && (_jsx("button", { className: styles['header-login-btn'], onClick: () => instance.loginRedirect(), style: { marginLeft: 16 }, children: "Log in" }))] })] }) }));
 };
 export default Header;

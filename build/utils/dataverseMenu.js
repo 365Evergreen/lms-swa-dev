@@ -1,5 +1,3 @@
-// Dataverse API integration for megamenu
-// This utility fetches menu items from the hired_lmsmenuitems table
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -9,13 +7,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+import { msalInstance } from './msalConfig';
 export function fetchMenuItems() {
     return __awaiter(this, void 0, void 0, function* () {
         // Replace with your Dataverse API endpoint and authentication
-        const url = 'https://org05385a1b.crm6.dynamics.com/api/data/v9.2/hired_lmsmenuitems?$select=Name,Parent,Route,Icon';
-        // For production, use MSAL or Azure AD for authentication and pass the access token
-        // Here, we assume a bearer token is available (replace with your auth logic)
-        const token = window.localStorage.getItem('dataverse_access_token');
+        const url = 'https://org05385a1b.crm6.dynamics.com/api/data/v9.2/hired_lmsmenuitems?$select=hired_name,hired_parent,hired_route,hired_icon,hired_graphendpoint';
+        const dataverseScope = 'https://org05385a1b.crm6.dynamics.com/.default';
+        // Acquire token using MSAL
+        const account = msalInstance.getAllAccounts()[0];
+        if (!account)
+            throw new Error('No signed-in user');
+        const result = yield msalInstance.acquireTokenSilent({
+            account,
+            scopes: [dataverseScope],
+        });
+        const token = result.accessToken;
         const response = yield fetch(url, {
             headers: {
                 'Authorization': `Bearer ${token}`,

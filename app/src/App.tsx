@@ -5,12 +5,26 @@ import Header from './components/fluent/Header';
 import ContentRouter from './components/ContentRouter';
 
 const Hero = () => (
-	<section style={{
-		display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-		minHeight: '60vh', paddingTop: 80
-	}}>
-		<h1 style={{ fontSize: '2.5rem', fontWeight: 700, marginBottom: 16 }}>Welcome to the Accessible Learning Hub</h1>
-		<p style={{ fontSize: '1.25rem', color: '#444', maxWidth: 600, textAlign: 'center' }}>
+	<section
+		style={{
+			width: '100vw',
+			height: '60vh',
+			margin: 0,
+			padding: 0,
+			display: 'flex',
+			flexDirection: 'column',
+			alignItems: 'center',
+			justifyContent: 'center',
+			backgroundImage: 'url(https://storagehiredau.file.core.windows.net/learning/assets/hero-bg.png)',
+			backgroundSize: 'cover',
+			backgroundPosition: 'center',
+			backgroundRepeat: 'no-repeat',
+		}}
+	>
+		<h1 style={{ fontSize: '2.5rem', fontWeight: 700, marginBottom: 16, background: 'rgba(255,255,255,0.85)', padding: '0.5em 1em', borderRadius: 8 }}>
+			Welcome to the Accessible Learning Hub
+		</h1>
+		<p style={{ fontSize: '1.25rem', color: '#444', maxWidth: 600, textAlign: 'center', background: 'rgba(255,255,255,0.7)', padding: '0.5em 1em', borderRadius: 8 }}>
 			Discover accessible, modular learning with analytics and a beautiful, inclusive design.
 		</p>
 	</section>

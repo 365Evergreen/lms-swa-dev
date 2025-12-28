@@ -36,18 +36,8 @@ const Header: FC = () => {
 	useEffect(() => {
 		setLoading(true);
 		setError(null);
-		if (!accounts || accounts.length === 0) {
-			// Anonymous: fetch WordPress menu
-			fetchWordPressMenu()
-				.then(items => {
-					setMenuItems(items);
-					setLoading(false);
-				})
-				.catch(err => {
-					setError('Failed to load menu items');
-					setLoading(false);
-				});
-		} else {
+		// Only run one fetch per session type
+		if (accounts && accounts.length > 0) {
 			// Authenticated: fetch Dataverse menu
 			fetchMenuItems()
 				.then(items => {
@@ -57,6 +47,22 @@ const Header: FC = () => {
 				.catch(err => {
 					setError('Failed to load menu items');
 					setLoading(false);
+				});
+		} else {
+			// Anonymous: fetch WordPress menu
+			fetchWordPressMenu()
+				.then(items => {
+					setMenuItems(items);
+					setLoading(false);
+				})
+				.catch(err => {
+					setError(`Failed to load menu items: ${err.message}`);
+					setLoading(false);
+					// Log the error for debugging
+					if (typeof window !== 'undefined') {
+						// eslint-disable-next-line no-console
+						console.error('WPGraphQL menu fetch error:', err);
+					}
 				});
 		}
 	}, [accounts]);

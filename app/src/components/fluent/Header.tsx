@@ -160,7 +160,7 @@ const Header: FC = () => {
 										</NavigationMenu.Item>
 									);
 								} else {
-									// Anonymous: WordPress menu
+									// Anonymous: WordPress menu (flat structure)
 									return (
 										<NavigationMenu.Item key={parent} className={styles['header-link']}>
 											<NavigationMenu.Trigger className={styles['header-trigger']} aria-label={`Show submenu for ${parent}`}> 
@@ -170,20 +170,22 @@ const Header: FC = () => {
 											<NavigationMenu.Content className={styles['megamenu']}>
 												<div className={styles['megamenu-content']} role="menu">
 													<ul>
-														{(childMenuItems as WPMenuItem[]).filter(item => item.label === parent).flatMap(item => item.childItems || []).map(child => (
-															<li key={child.id} className={styles['megamenu-item']} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-																<a
-																	href={child.url}
-																	target="_blank"
-																	rel="noopener noreferrer"
-																	style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}
-																>
-																	{/* Optionally add a thumb icon here if available */}
-																	<span style={{ marginRight: 8, fontSize: 18 }}>👍</span>
-																	<span>{child.label}</span>
-																</a>
-															</li>
-														))}
+														{(childMenuItems as WPMenuItem[])
+															.filter(item => item.label === parent)
+															.map(item => (
+																<li key={item.id} className={styles['megamenu-item']} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+																	<a
+																		href={item.url}
+																		target="_blank"
+																		rel="noopener noreferrer"
+																		style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}
+																	>
+																		{/* Optionally add a thumb icon here if available */}
+																		<span style={{ marginRight: 8, fontSize: 18 }}>👍</span>
+																		<span>{item.label}</span>
+																	</a>
+																</li>
+															))}
 													</ul>
 												</div>
 											</NavigationMenu.Content>

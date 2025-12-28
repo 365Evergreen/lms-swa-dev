@@ -14,13 +14,21 @@ const MENU_LOCATION = 'PRIMARY'; // Change to your menu location slug
 export function fetchWordPressMenu() {
     return __awaiter(this, void 0, void 0, function* () {
         const query = `
-    query GetMenuItems {
-      menuItems(where: {location: ${JSON.stringify(MENU_LOCATION)}}) {
+    query {
+      menus {
         nodes {
           id
-          label
-          url
-          parentId
+          name
+          menuItems {
+            edges {
+              node {
+                id
+                label
+                url
+                parentId
+              }
+            }
+          }
         }
       }
     }
@@ -37,19 +45,10 @@ export function fetchWordPressMenu() {
         if (errors) {
             throw new Error(errors.map((e) => e.message).join(', '));
         }
-        // Flat list to tree
-        const items = data.menuItems.nodes;
-        const itemMap = {};
-        items.forEach(item => { item.childItems = []; itemMap[item.id] = item; });
-        const tree = [];
-        items.forEach(item => {
-            if (item.parentId && itemMap[item.parentId]) {
-                itemMap[item.parentId].childItems.push(item);
-            }
-            else {
-                tree.push(item);
-            }
-        });
-        return tree;
+        // Get the first menu's items
+        const menu = data.menus.nodes[0];
+        if (!menu)
+            return [];
+        return menu.menuItems.edges.map((edge) => edge.node);
     });
 }

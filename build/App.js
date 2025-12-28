@@ -12,7 +12,7 @@ const Hero = () => (_jsxs("section", { style: {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundImage: 'url(https://storagehiredau.file.core.windows.net/learning/assets/hero-bg.png)',
+        backgroundImage: 'url(https://storagehiredau.blob.core.windows.net/learning/hero-bg.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',

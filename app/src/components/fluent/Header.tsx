@@ -34,16 +34,14 @@ const Header: FC = () => {
 	}, []);
 
 
-	// Reset menu state on auth change
+	// Only run menu fetch after accounts is initialized (not undefined)
 	useEffect(() => {
+		if (accounts === undefined) return;
 		setMenuItems([]);
 		setError(null);
 		setLoading(false);
-	}, [accounts]);
 
-	// Authenticated: fetch Dataverse menu
-	useEffect(() => {
-		if (accounts && accounts.length > 0) {
+		if (Array.isArray(accounts) && accounts.length > 0) {
 			setLoading(true);
 			setError(null);
 			fetchMenuItems()
@@ -55,12 +53,7 @@ const Header: FC = () => {
 					setError('Failed to load menu items');
 					setLoading(false);
 				});
-		}
-	}, [accounts]);
-
-	// Anonymous: fetch WordPress menu
-	useEffect(() => {
-		if (!accounts || accounts.length === 0) {
+		} else if (Array.isArray(accounts) && accounts.length === 0) {
 			setLoading(true);
 			setError(null);
 			fetchWordPressMenu()

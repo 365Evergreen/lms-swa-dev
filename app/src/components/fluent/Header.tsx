@@ -84,54 +84,31 @@ const Header: FC = () => {
 												{error && <div style={{ color: 'red' }}>{error}</div>}
 												<ul>
 													{children.map(child => (
-														<li
+														<NavLink
 															key={child.hired_lmsmenuitemid}
-															role="menuitem"
-															tabIndex={0}
-															className={styles['megamenu-item']}
+															to={`/${child.hired_route}`}
+															className={({ isActive }) => `${styles['megamenu-item']} ${isActive ? styles['active-link'] : ''}`}
+															style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit', position: 'relative' }}
 														>
-															<NavLink
-																to={`/${child.hired_route}`}
-																className={({ isActive }) => isActive ? styles['active-link'] : ''}
-																style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}
-															>
-																{child.hired_icon && (
-																	<img
-																		src={child.hired_icon}
-																		alt=""
-																		style={{ width: 20, height: 20, marginRight: 8 }}
-																		onMouseOver={e => {
-																			if (child.hired_icon) {
-																				(e.currentTarget as HTMLImageElement).style.transform = 'scale(1.2)';
-																			}
-																		}}
-																		onMouseOut={e => {
-																			(e.currentTarget as HTMLImageElement).style.transform = 'scale(1)';
-																		}}
-																	/>
-																)}
-																<span>{child.hired_name}</span>
-																{/* Thumbnail preview on hover */}
-																{child.hired_icon && (
-																	<span
-																		style={{
-																			position: 'absolute',
-																			left: '110%',
-																			top: 0,
-																			zIndex: 1001,
-																			display: 'none',
-																			background: '#fff',
-																			border: '1px solid #ccc',
-																			borderRadius: 4,
-																			padding: 4,
-																		}}
-																		className="thumbnail-preview"
-																	>
-																		<img src={child.hired_icon} alt="thumbnail" style={{ width: 64, height: 64 }} />
-																	</span>
-																)}
-															</NavLink>
-														</li>
+															{child.hired_icon && (
+																<img
+																	src={child.hired_icon}
+																	alt=""
+																	style={{ width: 20, height: 20, marginRight: 8 }}
+																	onMouseOver={e => {
+																		if (child.hired_icon) {
+																			(e.currentTarget as HTMLImageElement).style.transform = 'scale(1.2)';
+																		}
+																	}}
+																	onMouseOut={e => {
+																		(e.currentTarget as HTMLImageElement).style.transform = 'scale(1)';
+																	}}
+																/>
+															)}
+															<span>{child.hired_name}</span>
+															{/* Thumbnail preview on hover */}
+															{/* You can enhance this with a tooltip or popover if desired */}
+														</NavLink>
 													))}
 												</ul>
 											</div>

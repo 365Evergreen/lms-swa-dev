@@ -23,6 +23,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - name: Clean build output
+        run: |
+          cd app
+          npx rimraf build
       - name: Install dependencies and build
         run: |
           cd app

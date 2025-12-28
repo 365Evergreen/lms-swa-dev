@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import type { FC } from 'react';
 import { useMsal } from '@azure/msal-react';
 import { useNavigate, NavLink } from 'react-router-dom';
-import hiredLogo from '../../assets/HiRED-logo-red.png';
+const hiredLogo = 'https://storagehiredau.blob.core.windows.net/learning/HiRED-logo-red-D5xTJQF0.png';
 import styles from './Header.module.css';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import ChevronDown24Regular from './ChevronDown24Regular';

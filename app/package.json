@@ -6,5 +6,7 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview"
   },
-  "dependencies": {}
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
 }

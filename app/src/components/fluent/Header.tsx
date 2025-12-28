@@ -1,6 +1,8 @@
 
 import { useEffect, useState } from 'react';
 import type { FC } from 'react';
+import { useMsal } from '@azure/msal-react';
+import { useNavigate } from 'react-router-dom';
 import hiredLogo from '../../assets/HiRED-logo-red.png';
 import styles from './Header.module.css';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
@@ -12,11 +14,14 @@ import type { MenuItem } from '../../utils/dataverseMenu';
 // Hardcoded parent items
 const PARENTS = ['Topics', 'Courses', 'Pathways', 'Community', 'Resources'];
 
+
 const Header: FC = () => {
 	const [scrolled, setScrolled] = useState(false);
 	const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+	const { instance, accounts } = useMsal();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const onScroll = () => {
@@ -37,6 +42,13 @@ const Header: FC = () => {
 				setLoading(false);
 			});
 	}, []);
+
+	// If authenticated, redirect to landing page
+	useEffect(() => {
+		if (accounts && accounts.length > 0) {
+			navigate('/landing', { replace: true });
+		}
+	}, [accounts, navigate]);
 
 	return (
 		<header className={scrolled ? `${styles.header} ${styles.headerScrolled}` : styles.header}>
@@ -81,6 +93,16 @@ const Header: FC = () => {
 							})}
 						</NavigationMenu.List>
 					</NavigationMenu.Root>
+					{/* Login button for unauthenticated users */}
+					{(!accounts || accounts.length === 0) && (
+						<button
+							className={styles['header-login-btn']}
+							onClick={() => instance.loginRedirect()}
+							style={{ marginLeft: 16 }}
+						>
+							Log in
+						</button>
+					)}
 				</div>
 			</div>
 		</header>

@@ -1,9 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var client_1 = require("react-dom/client");
+var jsx_runtime_1 = require("react/jsx-runtime");
+var React = require("react");
+var ReactDOM = require("react-dom/client");
 var App_1 = require("./App");
 require("./index.css");
-client_1.default.createRoot(document.getElementById('root')).render(<react_1.default.StrictMode>
-    <App_1.default />
-  </react_1.default.StrictMode>);
+var msal_react_1 = require("@azure/msal-react");
+var msalConfig_1 = require("./utils/msalConfig");
+var react_router_dom_1 = require("react-router-dom");
+ReactDOM.createRoot(document.getElementById('root')).render((0, jsx_runtime_1.jsx)(React.StrictMode, { children: (0, jsx_runtime_1.jsx)(msal_react_1.MsalProvider, { instance: msalConfig_1.msalInstance, children: (0, jsx_runtime_1.jsx)(react_router_dom_1.BrowserRouter, { children: (0, jsx_runtime_1.jsx)(App_1.default, {}) }) }) }));

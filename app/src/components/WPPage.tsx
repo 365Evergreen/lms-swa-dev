@@ -5,6 +5,11 @@ interface WPContent {
   id: string;
   title: string;
   content: string;
+  featuredImage?: {
+    node?: {
+      sourceUrl?: string;
+    };
+  };
 }
 
 const WPPage: React.FC = () => {
@@ -17,25 +22,38 @@ const WPPage: React.FC = () => {
     if (!slug) return;
     setLoading(true);
     setError(null);
-    // WPGraphQL query to get page by slug
+    // WPGraphQL query to get courses by slug
     const query = `
-      query GetPageBySlug($slug: ID!) {
-        page(id: $slug, idType: URI) {
-          id
-          title
-          content
+      query GetCourses {
+        courses {
+          nodes {
+            id
+            title
+            content(format: RENDERED)
+            featuredImage {
+              node {
+                sourceUrl
+              }
+            }
+          }
         }
       }
     `;
     fetch('https://thn.chh.mybluehost.me/website_8a441532/graphql', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query, variables: { slug } })
+      body: JSON.stringify({ query })
     })
       .then(res => res.json())
       .then(res => {
         if (res.errors) throw new Error(res.errors.map((e: any) => e.message).join(', '));
-        setPage(res.data.page);
+        // Find course by slug (match title or id)
+        const course = res.data.courses.nodes.find((c: any) => {
+          // Try to match slug to title (case-insensitive, replace spaces with hyphens)
+          const courseSlug = c.title.toLowerCase().replace(/\s+/g, '-');
+          return courseSlug === slug;
+        });
+        setPage(course || null);
         setLoading(false);
       })
       .catch(err => {
@@ -51,6 +69,9 @@ const WPPage: React.FC = () => {
   return (
     <div style={{ padding: '2rem' }}>
       <h2>{page.title}</h2>
+      {page.featuredImage?.node?.sourceUrl && (
+        <img src={page.featuredImage.node.sourceUrl} alt={page.title} style={{ maxWidth: '100%', marginBottom: '1rem' }} />
+      )}
       <div dangerouslySetInnerHTML={{ __html: page.content }} />
     </div>
   );

@@ -187,7 +187,7 @@ const Header: FC = () => {
 																return (
 																	<li key={item.id} className={styles['megamenu-item']} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
 																		<NavLink
-																			to={`/${parent.toLowerCase()}/${slug}`}
+																			to={`/${slug}`}
 																			style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}
 																		>
 																			<span style={{ marginRight: 8, fontSize: 18 }}>👍</span>

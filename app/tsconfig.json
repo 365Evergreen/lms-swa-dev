@@ -8,5 +8,6 @@
     "module": "ESNext",
     "target": "ES2015"
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["../build", "node_modules"]
 }

@@ -32,12 +32,13 @@ query courses {
     nodes {
       id
       title
-    }
-    edges {
-      node {
-        contentTypeName
-        course {
-          title(format: RENDERED)
+      content(format: RENDERED)
+      featuredImage {
+        cursor
+        node {
+          mediaType
+          filePath
+          sourceUrl
         }
       }
     }

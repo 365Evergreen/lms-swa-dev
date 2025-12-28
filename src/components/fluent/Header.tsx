@@ -1,50 +1,88 @@
 
+
+import { useEffect, useState } from 'react';
 import type { FC } from 'react';
 import hiredLogo from '../../assets/HiRED-logo-red.png';
+import styles from './Header.module.css';
+import * as NavigationMenu from '@radix-ui/react-navigation-menu';
+import ChevronDown24Regular from './ChevronDown24Regular';
+import './NavigationMenuRadix.css';
+import { fetchMenuItems } from '../../utils/dataverseMenu';
+import type { MenuItem } from '../../utils/dataverseMenu';
+
+
+// Hardcoded parent items
+const PARENTS = ['Topics', 'Courses', 'Pathways', 'Community', 'Resources'];
 
 const Header: FC = () => {
+  const [scrolled, setScrolled] = useState(false);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    fetchMenuItems()
+      .then(items => {
+        setMenuItems(items);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError('Failed to load menu items');
+        setLoading(false);
+      });
+  }, []);
+
   return (
-    <header
-      style={{
-        width: '100vw',
-        marginTop: 0,
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '0.5rem 3vw',
-        background: 'var(--themePrimary, #001729)',
-        color: 'var(--white, #ffffff)',
-        minHeight: 56,
-        boxShadow: '0 2px 4px rgba(0,0,0,0.04)',
-        zIndex: 100,
-      }}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        {/* Logo */}
-        <img
-          src={hiredLogo}
-          alt="HiRED logo"
-          style={{ width: 32, height: 32, objectFit: 'contain', borderRadius: 4, marginRight: 12, background: 'var(--white, #fff)' }}
-        />
-        <span style={{ fontWeight: 700, fontSize: 22, letterSpacing: 0.5 }}>
-          {/* App name placeholder */}
-          Learn
-        </span>
-      </div>
-      <nav style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-        {/* Menu items placeholder */}
-        <span style={{ fontWeight: 500, cursor: 'pointer', opacity: 0.7 }}>Documentation</span>
-        <span style={{ fontWeight: 500, cursor: 'pointer', opacity: 0.7 }}>Training</span>
-        <span style={{ fontWeight: 500, cursor: 'pointer', opacity: 0.7 }}>Topics</span>
-      </nav>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-        {/* Profile/avatar placeholder */}
-        <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#2d2d23', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 18 }}>
-          PM
+    <header className={scrolled ? `${styles.header} ${styles.headerScrolled}` : styles.header}>
+      <div className={styles['header-content']}>
+        <div className={styles['header-left']}>
+          <img
+            src={hiredLogo}
+            alt="HiRED logo"
+            className={styles['header-logo']}
+          />
+          <span className={styles['header-title']}>
+            Learn
+          </span>
+        </div>
+        <div className={styles['header-right']}>
+          <NavigationMenu.Root orientation="horizontal">
+            <NavigationMenu.List className={styles['header-nav']}>
+              {PARENTS.map((parent) => {
+                const children = menuItems.filter(item => item.Parent === parent);
+                return (
+                  <NavigationMenu.Item key={parent} className={styles['header-link']}>
+                    <NavigationMenu.Trigger className={styles['header-trigger']} aria-label={`Show submenu for ${parent}`}> 
+                      <span className={styles['header-trigger-label']}>{parent}</span>
+                      <span className={styles['header-trigger-chevron']}><ChevronDown24Regular /></span>
+                    </NavigationMenu.Trigger>
+                    <NavigationMenu.Content className={styles['megamenu']}>
+                      <div className={styles['megamenu-content']} role="menu">
+                        {loading && <div>Loading...</div>}
+                        {error && <div style={{ color: 'red' }}>{error}</div>}
+                        <ul>
+                          {children.map(child => (
+                            <li key={child.Name} role="menuitem" tabIndex={0}>
+                              {child.Icon && <img src={child.Icon} alt="" style={{ width: 20, height: 20, marginRight: 8 }} />}
+                              {child.Name}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </NavigationMenu.Content>
+                  </NavigationMenu.Item>
+                );
+              })}
+            </NavigationMenu.List>
+          </NavigationMenu.Root>
         </div>
       </div>
     </header>

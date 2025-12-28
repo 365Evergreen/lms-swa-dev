@@ -1,0 +1,58 @@
+/* Radix UI NavigationMenu base styles (minimal, accessible, no decoration)
+   - All parent items visible and collapsed on load
+   - Selecting a parent exposes only its children
+   - No text/icon decoration
+   - Simple, accessible, keyboard-friendly
+*/
+
+.navigationMenuRoot {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background: transparent;
+}
+
+.navigationMenuList {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navigationMenuItem {
+  position: relative;
+}
+
+
+.navigationMenuItem[data-state="open"] .navigationMenuContent {
+  display: block;
+}
+
+/* Children list */
+.navigationMenuChildren {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navigationMenuChild {
+  padding: 0.5rem 0;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font: inherit;
+  outline: none;
+}
+
+.navigationMenuChild:focus {
+  background: #f0f0f0;
+}
+
+/* Accessibility: focus ring */
+.navigationMenuTrigger:focus,
+.navigationMenuChild:focus {
+  box-shadow: 0 0 0 2px #0078d4;
+}

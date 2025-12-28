@@ -80,16 +80,18 @@ const Header: FC = () => {
 	return (
 		<header className={scrolled ? `${styles.header} ${styles.headerScrolled}` : styles.header}>
 			<div className={styles['header-content']}>
-				<div className={styles['header-left']}>
-					<img
-						src={hiredLogo}
-						alt="HiRED logo"
-						className={styles['header-logo']}
-					/>
-					<span className={styles['header-title']}>
-						Learn
-					</span>
-				</div>
+				   <div className={styles['header-left']}>
+					   <NavLink to="/landing" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+						   <img
+							   src={hiredLogo}
+							   alt="HiRED logo"
+							   className={styles['header-logo']}
+						   />
+						   <span className={styles['header-title']}>
+							   Learn
+						   </span>
+					   </NavLink>
+				   </div>
 				<div className={styles['header-right']}>
 					<NavigationMenu.Root orientation="horizontal">
 						<NavigationMenu.List className={styles['header-nav']}>

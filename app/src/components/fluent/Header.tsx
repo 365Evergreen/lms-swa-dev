@@ -172,20 +172,28 @@ const Header: FC = () => {
 													<ul>
 														{(childMenuItems as WPMenuItem[])
 															.filter(item => item.label === parent)
-															.map(item => (
-																<li key={item.id} className={styles['megamenu-item']} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-																	<a
-																		href={item.url}
-																		target="_blank"
-																		rel="noopener noreferrer"
-																		style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}
-																	>
-																		{/* Optionally add a thumb icon here if available */}
-																		<span style={{ marginRight: 8, fontSize: 18 }}>👍</span>
-																		<span>{item.label ? item.label : 'Menu Item'}</span>
-																	</a>
-																</li>
-															))}
+															.map(item => {
+																// Extract slug from the WordPress URL
+																let slug = '';
+																try {
+																	const url = new URL(item.url);
+																	const parts = url.pathname.split('/').filter(Boolean);
+																	slug = parts[parts.length - 1];
+																} catch (e) {
+																	slug = item.url;
+																}
+																return (
+																	<li key={item.id} className={styles['megamenu-item']} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+																		<NavLink
+																			to={`/${parent.toLowerCase()}/${slug}`}
+																			style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}
+																		>
+																			<span style={{ marginRight: 8, fontSize: 18 }}>👍</span>
+																			<span>{item.label ? item.label : 'Menu Item'}</span>
+																		</NavLink>
+																	</li>
+																);
+															})}
 													</ul>
 												</div>
 											</NavigationMenu.Content>

@@ -34,7 +34,7 @@ const Header: FC = () => {
         setMenuItems(items);
         setLoading(false);
       })
-      .catch(err => {
+      .catch(_err => {
         setError('Failed to load menu items');
         setLoading(false);
       });

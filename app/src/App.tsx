@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import LandingPage from './LandingPage';
 import Header from './components/fluent/Header';
+import ContentRouter from './components/ContentRouter';
 
 const Hero = () => (
 	<section style={{
@@ -16,15 +17,18 @@ const Hero = () => (
 );
 
 const App = () => (
-	<>
-		<Header />
-		<main style={{ paddingTop: 80 }}>
-			<Routes>
-				<Route path="/landing" element={<LandingPage />} />
-				<Route path="/*" element={<Hero />} />
-			</Routes>
-		</main>
-	</>
+       <>
+	       <Header />
+	       <main style={{ paddingTop: 80 }}>
+		       <Routes>
+			       <Route path="/landing" element={<LandingPage />} />
+			       {/* Dynamic route for content types: /:type/:slug */}
+			       <Route path=":type/:slug" element={<ContentRouter />} />
+			       {/* Fallback route */}
+			       <Route path="/*" element={<Hero />} />
+		       </Routes>
+	       </main>
+       </>
 );
 
 export default App;

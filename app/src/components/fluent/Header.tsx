@@ -182,7 +182,7 @@ const Header: FC = () => {
 																	>
 																		{/* Optionally add a thumb icon here if available */}
 																		<span style={{ marginRight: 8, fontSize: 18 }}>👍</span>
-																		<span>{item.label}</span>
+																		<span>{item.label ? item.label : 'Menu Item'}</span>
 																	</a>
 																</li>
 															))}

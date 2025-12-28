@@ -1,3 +1,5 @@
+import { msalInstance } from './msalConfig';
+
 // Dataverse API integration for megamenu
 // This utility fetches menu items from the hired_lmsmenuitems table
 
@@ -13,9 +15,16 @@ export async function fetchMenuItems(): Promise<MenuItem[]> {
   const url =
     'https://org05385a1b.crm6.dynamics.com/api/data/v9.2/hired_lmsmenuitems?$select=Name,Parent,Route,Icon';
 
-  // For production, use MSAL or Azure AD for authentication and pass the access token
-  // Here, we assume a bearer token is available (replace with your auth logic)
-  const token = window.localStorage.getItem('dataverse_access_token');
+  const dataverseScope = 'https://org05385a1b.crm6.dynamics.com/.default';
+
+  // Acquire token using MSAL
+  const account = msalInstance.getAllAccounts()[0];
+  if (!account) throw new Error('No signed-in user');
+  const result = await msalInstance.acquireTokenSilent({
+    account,
+    scopes: [dataverseScope],
+  });
+  const token = result.accessToken;
 
   const response = await fetch(url, {
     headers: {

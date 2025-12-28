@@ -15,13 +15,14 @@ import type { MenuItem } from '../../utils/dataverseMenu';
 const PARENTS = ['Topics', 'Courses', 'Pathways', 'Community', 'Resources'];
 
 
+
 const Header: FC = () => {
-	const [scrolled, setScrolled] = useState(false);
-	const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState<string | null>(null);
-	const { instance, accounts } = useMsal();
-	const navigate = useNavigate();
+  const [scrolled, setScrolled] = useState(false);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { instance, accounts } = useMsal();
+  const navigate = useNavigate();
 
 	useEffect(() => {
 		const onScroll = () => {
@@ -67,7 +68,7 @@ const Header: FC = () => {
 					<NavigationMenu.Root orientation="horizontal">
 						<NavigationMenu.List className={styles['header-nav']}>
 							{PARENTS.map((parent) => {
-								const children = menuItems.filter(item => item.Parent === parent);
+								const children = menuItems.filter(item => item.hired_parent === parent);
 								return (
 									<NavigationMenu.Item key={parent} className={styles['header-link']}>
 										<NavigationMenu.Trigger className={styles['header-trigger']} aria-label={`Show submenu for ${parent}`}> 
@@ -80,9 +81,9 @@ const Header: FC = () => {
 												{error && <div style={{ color: 'red' }}>{error}</div>}
 												<ul>
 													{children.map(child => (
-														<li key={child.Name} role="menuitem" tabIndex={0}>
-															{child.Icon && <img src={child.Icon} alt="" style={{ width: 20, height: 20, marginRight: 8 }} />}
-															{child.Name}
+														<li key={child.hired_lmsmenuitemid} role="menuitem" tabIndex={0}>
+															{child.hired_icon && <img src={child.hired_icon} alt="" style={{ width: 20, height: 20, marginRight: 8 }} />}
+															{child.hired_name}
 														</li>
 													))}
 												</ul>

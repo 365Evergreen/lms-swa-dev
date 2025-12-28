@@ -33,16 +33,19 @@ const Header: FC = () => {
 	}, []);
 
 	useEffect(() => {
+		if (!accounts || accounts.length === 0) return;
+		setLoading(true);
 		fetchMenuItems()
 			.then(items => {
 				setMenuItems(items);
 				setLoading(false);
 			})
-			.catch(_err => {
+			.catch(err => {
+				console.error('Failed to load menu items:', err);
 				setError('Failed to load menu items');
 				setLoading(false);
 			});
-	}, []);
+	}, [accounts]);
 
 	// If authenticated, redirect to landing page
 	useEffect(() => {

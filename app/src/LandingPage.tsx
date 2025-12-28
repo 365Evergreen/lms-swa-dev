@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { useMsal } from '@azure/msal-react';
 
 const LandingPage: React.FC = () => {

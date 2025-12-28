@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "moduleResolution": "bundler",
+    "module": "ESNext",
+    "target": "ES2015"
   },
   "files": [],
   "references": [

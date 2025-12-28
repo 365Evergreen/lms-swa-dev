@@ -2,7 +2,11 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "../build",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "esModuleInterop": true,
+    "moduleResolution": "bundler",
+    "module": "ESNext",
+    "target": "ES2015"
   },
   "include": ["src"]
 }

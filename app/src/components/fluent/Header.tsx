@@ -19,9 +19,9 @@ const PARENTS = ['Topics', 'Courses', 'Pathways', 'Community', 'Resources'];
 
 const Header: FC = () => {
   const [scrolled, setScrolled] = useState(false);
-	const [menuItems, setMenuItems] = useState<MenuItem[] | WPMenuItem[]>([]);
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<string | null>(null);
+	const [childMenuItems, setChildMenuItems] = useState<MenuItem[] | WPMenuItem[]>([]);
+	const [childrenLoading, setChildrenLoading] = useState(false);
+	const [childrenError, setChildrenError] = useState<string | null>(null);
   const { instance, accounts } = useMsal();
   const navigate = useNavigate();
 
@@ -34,36 +34,34 @@ const Header: FC = () => {
 	}, []);
 
 
-	// Only run menu fetch after accounts is initialized (not undefined)
+	// Only fetch child menu items after MSAL auth state is known
 	useEffect(() => {
-		if (accounts === undefined) return;
-		setMenuItems([]);
-		setError(null);
-		setLoading(false);
+		if (!Array.isArray(accounts)) return; // Wait for MSAL to resolve
+		setChildMenuItems([]);
+		setChildrenError(null);
+		setChildrenLoading(true);
 
-		if (Array.isArray(accounts) && accounts.length > 0) {
-			setLoading(true);
-			setError(null);
+		if (accounts.length > 0) {
+			// Authenticated: fetch Dataverse menu
 			fetchMenuItems()
 				.then(items => {
-					setMenuItems(items);
-					setLoading(false);
+					setChildMenuItems(items);
+					setChildrenLoading(false);
 				})
 				.catch(err => {
-					setError('Failed to load menu items');
-					setLoading(false);
+					setChildrenError('Failed to load menu items');
+					setChildrenLoading(false);
 				});
-		} else if (Array.isArray(accounts) && accounts.length === 0) {
-			setLoading(true);
-			setError(null);
+		} else {
+			// Anonymous: fetch WordPress menu
 			fetchWordPressMenu()
 				.then(items => {
-					setMenuItems(items);
-					setLoading(false);
+					setChildMenuItems(items);
+					setChildrenLoading(false);
 				})
 				.catch(err => {
-					setError(`Failed to load menu items: ${err.message}`);
-					setLoading(false);
+					setChildrenError(`Failed to load menu items: ${err.message}`);
+					setChildrenLoading(false);
 					if (typeof window !== 'undefined') {
 						// eslint-disable-next-line no-console
 						console.error('WPGraphQL menu fetch error:', err);
@@ -96,9 +94,8 @@ const Header: FC = () => {
 					<NavigationMenu.Root orientation="horizontal">
 						<NavigationMenu.List className={styles['header-nav']}>
 							{PARENTS.map((parent) => {
-								// Authenticated: Dataverse menu
-								if (accounts && accounts.length > 0) {
-									const children = (menuItems as MenuItem[]).filter(item => item.hired_parent === parent);
+								// Show loading or error for child items
+								if (childrenLoading) {
 									return (
 										<NavigationMenu.Item key={parent} className={styles['header-link']}>
 											<NavigationMenu.Trigger className={styles['header-trigger']} aria-label={`Show submenu for ${parent}`}> 
@@ -107,8 +104,38 @@ const Header: FC = () => {
 											</NavigationMenu.Trigger>
 											<NavigationMenu.Content className={styles['megamenu']}>
 												<div className={styles['megamenu-content']} role="menu">
-													{loading && <div>Loading...</div>}
-													{error && <div style={{ color: 'red' }}>{error}</div>}
+													<div>Loading...</div>
+												</div>
+											</NavigationMenu.Content>
+										</NavigationMenu.Item>
+									);
+								}
+								if (childrenError) {
+									return (
+										<NavigationMenu.Item key={parent} className={styles['header-link']}>
+											<NavigationMenu.Trigger className={styles['header-trigger']} aria-label={`Show submenu for ${parent}`}> 
+												<span className={styles['header-trigger-label']}>{parent}</span>
+												<span className={styles['header-trigger-chevron']}><ChevronDown24Regular /></span>
+											</NavigationMenu.Trigger>
+											<NavigationMenu.Content className={styles['megamenu']}>
+												<div className={styles['megamenu-content']} role="menu">
+													<div style={{ color: 'red' }}>{childrenError}</div>
+												</div>
+											</NavigationMenu.Content>
+										</NavigationMenu.Item>
+									);
+								}
+								// Authenticated: Dataverse menu
+								if (accounts && accounts.length > 0) {
+									const children = (childMenuItems as MenuItem[]).filter(item => item.hired_parent === parent);
+									return (
+										<NavigationMenu.Item key={parent} className={styles['header-link']}>
+											<NavigationMenu.Trigger className={styles['header-trigger']} aria-label={`Show submenu for ${parent}`}> 
+												<span className={styles['header-trigger-label']}>{parent}</span>
+												<span className={styles['header-trigger-chevron']}><ChevronDown24Regular /></span>
+											</NavigationMenu.Trigger>
+											<NavigationMenu.Content className={styles['megamenu']}>
+												<div className={styles['megamenu-content']} role="menu">
 													<ul>
 														{children.map(child => (
 															<NavLink
@@ -142,10 +169,8 @@ const Header: FC = () => {
 											</NavigationMenu.Trigger>
 											<NavigationMenu.Content className={styles['megamenu']}>
 												<div className={styles['megamenu-content']} role="menu">
-													{loading && <div>Loading...</div>}
-													{error && <div style={{ color: 'red' }}>{error}</div>}
 													<ul>
-														{(menuItems as WPMenuItem[]).filter(item => item.label === parent).flatMap(item => item.childItems || []).map(child => (
+														{(childMenuItems as WPMenuItem[]).filter(item => item.label === parent).flatMap(item => item.childItems || []).map(child => (
 															<li key={child.id} className={styles['megamenu-item']} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
 																<a
 																	href={child.url}

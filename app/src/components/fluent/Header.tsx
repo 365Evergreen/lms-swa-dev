@@ -20,7 +20,7 @@ const PARENTS = ['Topics', 'Courses', 'Pathways', 'Community', 'Resources'];
 const Header: FC = () => {
   const [scrolled, setScrolled] = useState(false);
 	const [menuItems, setMenuItems] = useState<MenuItem[] | WPMenuItem[]>([]);
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
   const { instance, accounts } = useMsal();
   const navigate = useNavigate();
@@ -33,12 +33,19 @@ const Header: FC = () => {
 		return () => window.removeEventListener('scroll', onScroll);
 	}, []);
 
+
+	// Reset menu state on auth change
 	useEffect(() => {
-		setLoading(true);
+		setMenuItems([]);
 		setError(null);
-		// Only run one fetch per session type
+		setLoading(false);
+	}, [accounts]);
+
+	// Authenticated: fetch Dataverse menu
+	useEffect(() => {
 		if (accounts && accounts.length > 0) {
-			// Authenticated: fetch Dataverse menu
+			setLoading(true);
+			setError(null);
 			fetchMenuItems()
 				.then(items => {
 					setMenuItems(items);
@@ -48,8 +55,14 @@ const Header: FC = () => {
 					setError('Failed to load menu items');
 					setLoading(false);
 				});
-		} else {
-			// Anonymous: fetch WordPress menu
+		}
+	}, [accounts]);
+
+	// Anonymous: fetch WordPress menu
+	useEffect(() => {
+		if (!accounts || accounts.length === 0) {
+			setLoading(true);
+			setError(null);
 			fetchWordPressMenu()
 				.then(items => {
 					setMenuItems(items);
@@ -58,7 +71,6 @@ const Header: FC = () => {
 				.catch(err => {
 					setError(`Failed to load menu items: ${err.message}`);
 					setLoading(false);
-					// Log the error for debugging
 					if (typeof window !== 'undefined') {
 						// eslint-disable-next-line no-console
 						console.error('WPGraphQL menu fetch error:', err);

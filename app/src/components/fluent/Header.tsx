@@ -1,70 +1,88 @@
 
-import { useEffect, useState } from 'react';
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-const hiredLogo = 'https://storagehiredau.blob.core.windows.net/learning/HiRED-logo-red-D5xTJQF0.png';
+
+
+import React, { useState } from 'react';
 import styles from './Header.module.css';
 
-// Hardcoded parent items
-const PARENTS = [
-	{ label: 'Topics', route: '/topics' },
-	{ label: 'Courses', route: '/courses' },
-	{ label: 'Pathways', route: '/pathways' },
-	{ label: 'Community', route: '/community' },
-	{ label: 'Resources', route: '/resources' },
+// Example nav links with API endpoint for demonstration
+const navLinks = [
+  { label: 'Topics', href: '/topics', api: '/api/topics' },
+  { label: 'Courses', href: '/courses', api: '/api/courses' },
+  { label: 'Pathways', href: '/pathways', api: '/api/pathways' },
+  { label: 'Community', href: '/community', api: '/api/community' },
+  { label: 'Resources', href: '/resources', api: '/api/resources' },
 ];
 
 
+export default function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
 
-const Header: React.FC = () => {
-	const [scrolled, setScrolled] = useState(false);
-	const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  // Responsive: close menu on nav click (mobile)
+  const handleNavClick = async (e: React.MouseEvent<HTMLAnchorElement>, api?: string) => {
+    setMenuOpen(false);
+    if (api) {
+      // Example API call on link click
+      try {
+        await fetch(api);
+      } catch (err) {
+        // Handle error (optional)
+      }
+    }
+  };
 
-	return (
-		<header className={scrolled ? `${styles.header} ${styles.headerScrolled}` : styles.header}>
-			<div className={styles['header-content']}>
-				<NavLink to="/landing" className={styles['header-logo-link']} tabIndex={0} aria-label="Home">
-					<img
-						src={hiredLogo}
-						alt="HiRED logo"
-						className={styles['header-logo']}
-					/>
-				</NavLink>
-				<button
-					className={styles.hamburger}
-					aria-label={mobileNavOpen ? 'Close menu' : 'Open menu'}
-					aria-expanded={mobileNavOpen}
-					aria-controls="main-nav"
-					onClick={() => setMobileNavOpen((open) => !open)}
-					type="button"
-				>
-					<span className={styles['hamburger-bar']} />
-					<span className={styles['hamburger-bar']} />
-					<span className={styles['hamburger-bar']} />
-				</button>
-				<nav
-					className={mobileNavOpen ? `${styles['header-nav']} open` : styles['header-nav']}
-					aria-label="Main navigation"
-					id="main-nav"
-				>
-					<ul className={styles['header-nav-list']}>
-						{PARENTS.map((item) => (
-							<li key={item.label} className={styles['header-link']}>
-								<NavLink
-									to={item.route}
-									className={({ isActive }) => isActive ? styles['active-link'] : ''}
-									tabIndex={0}
-									onClick={() => setMobileNavOpen(false)}
-								>
-									{item.label}
-								</NavLink>
-							</li>
-						))}
-					</ul>
-				</nav>
-			</div>
-		</header>
-	);
+  return (
+    <header className={styles.header}>
+      <div className={styles.logo}>
+        <a href="/" aria-label="Accessible Learning Hub Home">
+          <span className={styles.logoText}>Accessible Learning Hub</span>
+        </a>
+      </div>
+      <button
+        className={styles.hamburger}
+        aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+        aria-expanded={menuOpen}
+        aria-controls="main-nav"
+        onClick={() => setMenuOpen((open) => !open)}
+        type="button"
+      >
+        <span className={styles.hamburgerBar} />
+        <span className={styles.hamburgerBar} />
+        <span className={styles.hamburgerBar} />
+      </button>
+      <nav
+        id="main-nav"
+        className={menuOpen ? styles.navOpen : styles.nav}
+        aria-label="Main navigation"
+      >
+        <ul className={styles.navList}>
+          {navLinks.map((link) => (
+            <li key={link.href}>
+              <a
+                href={link.href}
+                className={styles.navLink}
+                tabIndex={menuOpen || typeof window === 'undefined' || window.innerWidth > 900 ? 0 : -1}
+                onClick={e => handleNavClick(e, link.api)}
+                style={{
+                  color: '#0056d6',
+                  textDecoration: 'none',
+                  fontWeight: 500,
+                  padding: '0 18px',
+                  display: 'inline-block',
+                  borderRadius: 4,
+                  background: 'none',
+                  transition: 'background 0.2s',
+                  height: 50,
+                  lineHeight: '50px',
+                }}
+                onMouseOver={e => (e.currentTarget.style.background = 'rgba(12,12,12,0.07)')}
+                onMouseOut={e => (e.currentTarget.style.background = 'none')}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </header>
+  );
 }
-
-export default Header;

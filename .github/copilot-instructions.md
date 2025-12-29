@@ -48,3 +48,5 @@ Accessible Learning Hub is an Azure Static Web Apps (SWA) based LMS focused on a
 
 ---
 _Update this file as the project evolves to ensure AI agents have the context needed for productive contributions._
+
+If I ask you make changes to files or fix errors, just do it without asking for confirmation.

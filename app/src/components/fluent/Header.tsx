@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from 'react';
-import type { FC } from 'react';
+import React from 'react';
 import { useMsal } from '@azure/msal-react';
 import { useNavigate, NavLink } from 'react-router-dom';
 const hiredLogo = 'https://storagehiredau.blob.core.windows.net/learning/HiRED-logo-red-D5xTJQF0.png';
@@ -17,7 +17,7 @@ const PARENTS = ['Topics', 'Courses', 'Pathways', 'Community', 'Resources'];
 
 
 
-const Header: FC = () => {
+const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
 	const [childMenuItems, setChildMenuItems] = useState<MenuItem[] | WPMenuItem[]>([]);
 	const [childrenLoading, setChildrenLoading] = useState(false);
@@ -70,155 +70,150 @@ const Header: FC = () => {
 		}
 	}, [accounts]);
 
-	// If authenticated, redirect to landing page
-	useEffect(() => {
-		if (accounts && accounts.length > 0) {
-			navigate('/landing', { replace: true });
-		}
-	}, [accounts, navigate]);
+		useEffect(() => {
+			if (accounts && accounts.length > 0) {
+				navigate('/landing', { replace: true });
+			}
+		}, [accounts, navigate]);
 
-	return (
-		<header className={scrolled ? `${styles.header} ${styles.headerScrolled}` : styles.header}>
-			<div className={styles['header-content']}>
-				   <div className={styles['header-left']}>
-					   <NavLink to="/landing" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
-						   <img
-							   src={hiredLogo}
-							   alt="HiRED logo"
-							   className={styles['header-logo']}
-						   />
-						   <span className={styles['header-title']}>
-							   Learn
-						   </span>
-					   </NavLink>
-				   </div>
-				<div className={styles['header-right']}>
-					<NavigationMenu.Root orientation="horizontal">
-						<NavigationMenu.List className={styles['header-nav']}>
-							{PARENTS.map((parent) => {
-								// Show loading or error for child items
-								if (childrenLoading) {
-									return (
-										<NavigationMenu.Item key={parent} className={styles['header-link']}>
-											<NavigationMenu.Trigger className={styles['header-trigger']} aria-label={`Show submenu for ${parent}`}> 
-												<span className={styles['header-trigger-label']}>{parent}</span>
-												<span className={styles['header-trigger-chevron']}><ChevronDown24Regular /></span>
-											</NavigationMenu.Trigger>
-											<NavigationMenu.Content className={styles['megamenu']}>
-												<div className={styles['megamenu-content']} role="menu">
-													<div>Loading...</div>
-												</div>
-											</NavigationMenu.Content>
-										</NavigationMenu.Item>
-									);
-								}
-								if (childrenError) {
-									return (
-										<NavigationMenu.Item key={parent} className={styles['header-link']}>
-											<NavigationMenu.Trigger className={styles['header-trigger']} aria-label={`Show submenu for ${parent}`}> 
-												<span className={styles['header-trigger-label']}>{parent}</span>
-												<span className={styles['header-trigger-chevron']}><ChevronDown24Regular /></span>
-											</NavigationMenu.Trigger>
-											<NavigationMenu.Content className={styles['megamenu']}>
-												<div className={styles['megamenu-content']} role="menu">
-													<div style={{ color: 'red' }}>{childrenError}</div>
-												</div>
-											</NavigationMenu.Content>
-										</NavigationMenu.Item>
-									);
-								}
-								// Authenticated: Dataverse menu
-								if (accounts && accounts.length > 0) {
-									const children = (childMenuItems as MenuItem[]).filter(item => item.hired_parent === parent);
-									return (
-										<NavigationMenu.Item key={parent} className={styles['header-link']}>
-											<NavigationMenu.Trigger className={styles['header-trigger']} aria-label={`Show submenu for ${parent}`}> 
-												<span className={styles['header-trigger-label']}>{parent}</span>
-												<span className={styles['header-trigger-chevron']}><ChevronDown24Regular /></span>
-											</NavigationMenu.Trigger>
-											<NavigationMenu.Content className={styles['megamenu']}>
-												<div className={styles['megamenu-content']} role="menu">
-													<ul>
-														{children.map(child => (
-															<NavLink
-																key={child.hired_lmsmenuitemid}
-																to={`/${child.hired_route}`}
-																className={({ isActive }) => `${styles['megamenu-item']} ${isActive ? styles['active-link'] : ''}`}
-																style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit', position: 'relative', cursor: 'pointer' }}
-															>
-																{child.hired_icon && (
-																	<img
-																		src={child.hired_icon}
-																		alt=""
-																		style={{ width: 20, height: 20, marginRight: 8 }}
-																	/>
-																)}
-																<span>{child.hired_name}</span>
-															</NavLink>
-														))}
-													</ul>
-												</div>
-											</NavigationMenu.Content>
-										</NavigationMenu.Item>
-									);
-								} else {
-									// Anonymous: WordPress menu (flat structure)
-									return (
-										<NavigationMenu.Item key={parent} className={styles['header-link']}>
-											<NavigationMenu.Trigger className={styles['header-trigger']} aria-label={`Show submenu for ${parent}`}> 
-												<span className={styles['header-trigger-label']}>{parent}</span>
-												<span className={styles['header-trigger-chevron']}><ChevronDown24Regular /></span>
-											</NavigationMenu.Trigger>
-											<NavigationMenu.Content className={styles['megamenu']}>
-												<div className={styles['megamenu-content']} role="menu">
-													<ul>
-														{(childMenuItems as WPMenuItem[])
-															.filter(item => item.label === parent)
-															.map(item => {
-																// Extract slug from the WordPress URL
-																let slug = '';
-																try {
-																	const url = new URL(item.url);
-																	const parts = url.pathname.split('/').filter(Boolean);
-																	slug = parts[parts.length - 1];
-																} catch (e) {
-																	slug = item.url;
-																}
-																return (
-																	<li key={item.id} className={styles['megamenu-item']} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-																		<NavLink
-																			to={`/${slug}`}
-																			style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}
-																		>
-																			<span style={{ marginRight: 8, fontSize: 18 }}>👍</span>
-																			<span>{item.label ? item.label : 'Menu Item'}</span>
-																		</NavLink>
-																	</li>
-																);
-															})}
-													</ul>
-												</div>
-											</NavigationMenu.Content>
-										</NavigationMenu.Item>
-									);
-								}
-							})}
-						</NavigationMenu.List>
-					</NavigationMenu.Root>
-					{/* Login button for unauthenticated users */}
-					{(!accounts || accounts.length === 0) && (
-						<button
-							className={styles['header-login-btn']}
-							onClick={() => instance.loginRedirect()}
-							style={{ marginLeft: 16 }}
-						>
-							Log in
-						</button>
-					)}
+		return (
+			<header className={scrolled ? `${styles.header} ${styles.headerScrolled}` : styles.header}>
+				<div className={styles['header-content']}>
+					<NavLink to="/landing" className={styles['header-logo-link']} tabIndex={0} aria-label="Home">
+						<img
+							src={hiredLogo}
+							alt="HiRED logo"
+							className={styles['header-logo']}
+						/>
+					</NavLink>
+					<nav className={styles['header-nav']} aria-label="Main navigation">
+						<NavigationMenu.Root orientation="horizontal">
+							<NavigationMenu.List className={styles['header-nav-list']}>
+								{PARENTS.map((parent) => {
+									if (childrenLoading) {
+										return (
+											<NavigationMenu.Item key={parent} className={styles['header-link']}>
+												<NavigationMenu.Trigger className={styles['header-trigger']} aria-label={`Show submenu for ${parent}`}>
+													<span className={styles['header-trigger-label']}>{parent}</span>
+													<span className={styles['header-trigger-chevron']}><ChevronDown24Regular /></span>
+												</NavigationMenu.Trigger>
+												<NavigationMenu.Content className={styles['megamenu']}>
+													<div className={styles['megamenu-content']} role="menu">
+														<div className={styles['megamenu-loading']}>Loading...</div>
+													</div>
+												</NavigationMenu.Content>
+											</NavigationMenu.Item>
+										);
+									}
+									if (childrenError) {
+										return (
+											<NavigationMenu.Item key={parent} className={styles['header-link']}>
+												<NavigationMenu.Trigger className={styles['header-trigger']} aria-label={`Show submenu for ${parent}`}>
+													<span className={styles['header-trigger-label']}>{parent}</span>
+													<span className={styles['header-trigger-chevron']}><ChevronDown24Regular /></span>
+												</NavigationMenu.Trigger>
+												<NavigationMenu.Content className={styles['megamenu']}>
+													<div className={styles['megamenu-content']} role="menu">
+														<div className={styles['megamenu-error']}>{childrenError}</div>
+													</div>
+												</NavigationMenu.Content>
+											</NavigationMenu.Item>
+										);
+									}
+									if (accounts && accounts.length > 0) {
+										const children = (childMenuItems as MenuItem[]).filter(item => item.hired_parent === parent);
+										return (
+											<NavigationMenu.Item key={parent} className={styles['header-link']}>
+												<NavigationMenu.Trigger className={styles['header-trigger']} aria-label={`Show submenu for ${parent}`}>
+													<span className={styles['header-trigger-label']}>{parent}</span>
+													<span className={styles['header-trigger-chevron']}><ChevronDown24Regular /></span>
+												</NavigationMenu.Trigger>
+												<NavigationMenu.Content className={styles['megamenu']}>
+													<div className={styles['megamenu-content']} role="menu">
+														<ul>
+															{children.map(child => (
+																<li key={child.hired_lmsmenuitemid} className={styles['megamenu-item']}>
+																	<NavLink
+																		to={`/${child.hired_route}`}
+																		className={({ isActive }) => `${styles['megamenu-link']} ${isActive ? styles['active-link'] : ''}`}
+																		tabIndex={0}
+																	>
+																		{child.hired_icon && (
+																			<img
+																				src={child.hired_icon}
+																				alt=""
+																				className={styles['megamenu-icon']}
+																			/>
+																		)}
+																		<span>{child.hired_name}</span>
+																	</NavLink>
+																</li>
+															))}
+														</ul>
+													</div>
+												</NavigationMenu.Content>
+											</NavigationMenu.Item>
+										);
+									} else {
+										return (
+											<NavigationMenu.Item key={parent} className={styles['header-link']}>
+												<NavigationMenu.Trigger className={styles['header-trigger']} aria-label={`Show submenu for ${parent}`}>
+													<span className={styles['header-trigger-label']}>{parent}</span>
+													<span className={styles['header-trigger-chevron']}><ChevronDown24Regular /></span>
+												</NavigationMenu.Trigger>
+												<NavigationMenu.Content className={styles['megamenu']}>
+													<div className={styles['megamenu-content']} role="menu">
+														<ul>
+															{(childMenuItems as WPMenuItem[])
+																.filter(item => item.label === parent)
+																.map(item => {
+																	let slug = '';
+																	try {
+																		const url = new URL(item.url);
+																		const parts = url.pathname.split('/').filter(Boolean);
+																		slug = parts[parts.length - 1];
+																	} catch (e) {
+																		slug = item.url;
+																	}
+																	return (
+																		<li key={item.id} className={styles['megamenu-item']}>
+																			<NavLink
+																				to={`/${slug}`}
+																				className={styles['megamenu-link']}
+																				tabIndex={0}
+																			>
+																				<span className={styles['megamenu-icon']}>👍</span>
+																				<span>{item.label ? item.label : 'Menu Item'}</span>
+																			</NavLink>
+																		</li>
+																	);
+																})}
+														</ul>
+													</div>
+												</NavigationMenu.Content>
+											</NavigationMenu.Item>
+										);
+									}
+								})}
+							</NavigationMenu.List>
+						</NavigationMenu.Root>
+						{(!accounts || accounts.length === 0) && (
+							<label
+								className={styles['header-login-label']}
+								tabIndex={0}
+								role="link"
+								onClick={() => instance.loginRedirect()}
+								onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') instance.loginRedirect(); }}
+								aria-label="Log in"
+								style={{ cursor: 'pointer', marginLeft: 16 }}
+							>
+								Log in
+							</label>
+						)}
+					</nav>
 				</div>
-			</div>
-		</header>
-	);
-};
+			</header>
+		);
+	}
 
-export default Header;
+	export default Header;

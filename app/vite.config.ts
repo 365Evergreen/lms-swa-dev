@@ -8,4 +8,7 @@ export default defineConfig({
     outDir: 'build',
   },
   publicDir: 'public',
+  server: {
+    historyApiFallback: true
+  }
 });

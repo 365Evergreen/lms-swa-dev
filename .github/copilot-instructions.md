@@ -1,66 +1,50 @@
 
+
 # Copilot Instructions for AI Agents
 
-## Project Vision
-This project is an **Accessible Learning Hub**: an Azure Static Web Apps (SWA) based learning management system (LMS) focused on accessibility, modular content, and analytics. See Accessible Learning Hub.md for the full blueprint.
+## Project Overview
+Accessible Learning Hub is an Azure Static Web Apps (SWA) based LMS focused on accessibility, modular content, and analytics. See docs/Accessible Learning Hub.md for personas, user stories, and process flows.
 
-## Current State
-- No implementation code or build system yet; this is a planning/requirements phase.
-- Key files:
-	- `Accessible Learning Hub.md`: Vision, personas, user stories, and process flows
-	- `README.md`: Project name only
+## Architecture & Key Patterns
+- **Frontend**: React 19 + Vite, TypeScript, Fluent UI, Radix UI, MSAL for Azure AD SSO
+- **Routing**: React Router v7, with dynamic routes for content types and slugs
+- **Menu/Navigation**: Authenticated users get menu from Dataverse (via Graph API, see src/utils/dataverseMenu.ts); anonymous users get menu from WordPress (via WPGraphQL, see src/utils/wordpressMenu.ts)
+- **Content**: Dynamic content loading via ContentRouter and WPPage components
+- **Styling**: CSS Modules for components, global styles in index.css, strict use of Fluent UI fonts
+- **Accessibility**: All UI must be accessible (keyboard, screen reader, high contrast)
 
-## Architecture & Design (Planned)
-- **Architecture**: Azure SWA frontend with serverless backend functions; Dataverse and SharePoint for data storage; Power BI for analytics
-- **Data Model**: Entities for Users, Courses, Modules, Assessments, Progress, and Achievements
-- **Personas**: Learner, Course Administrator, Business Owner, Course Teacher, Content Editor
-- **Core Processes**:
-	- Learner Course Engagement (browse, enroll, track, complete, profile, achievements)
-	- Course & Content Management (create, organize, maintain courses/modules/assessments)
-	- Assessment & Feedback (deliver content, assess, feedback, progress tracking)
-	- Platform Accessibility & Theming (accessibility compliance, dark/light mode, sidebar)
-	- Business Oversight & Analytics (monitor, report, set goals)
-  
-## UI/UX
+## Developer Workflows
+- **Install**: Use pnpm (preferred) or yarn. Run `pnpm install` in /app
+- **Dev server**: `pnpm dev` (runs Vite)
+- **Build**: `pnpm run build` (cleans, typechecks, builds to /build)
+- **Lint**: `pnpm run lint` (ESLint, config in app/eslint.config.js)
+- **Preview**: `pnpm run preview` (serves built app)
+- **TypeScript**: Config in app/tsconfig*.json; strict mode enabled
 
-- Fluent UI components, dark/light modes, collapsible sidebar, accessibility standards
-- Mobile-responsive design
-- Accessibility features (screen reader support, keyboard navigation, high contrast)
-- Intuitive navigation and user-friendly interfaces
+## Directory Structure
+- **/app/src/**: All source code
+  - **components/**: UI components (Fluent UI, Radix, Carousel, ContentRouter, WPPage)
+  - **utils/**: API clients (Dataverse, WordPress, MSAL config)
+  - **types/**: TypeScript type declarations for CSS modules, images
+  - **assets/**: Static assets (if any)
+- **/app/public/**: Static files, index.html, routes.json
+- **/build/**: Build output (ignored in source)
 
-Stick to UI principals like simplicity, consistency, feedback, and accessibility.
-Do not use placeholder text like "Lorem ipsum" in the UI.
-Do not use fallback fonts; always use Fluent UI typography.
+## Integration Points
+- **Azure AD SSO**: MSAL config in src/utils/msalConfig.ts, used via @azure/msal-react
+- **Dataverse**: Menu items fetched for authenticated users (see fetchMenuItems)
+- **WordPress**: Menu and content fetched for anonymous users (see fetchWordPressMenu, WPPage)
 
-## technology Stack (Planned)
+## UI/UX Conventions
+- Use Fluent UI and Radix UI components for all navigation and menus
+- No placeholder text ("Lorem ipsum") or fallback fonts
+- Always support dark/light mode and accessibility
+- Collapsible sidebar and responsive design are required
 
-- **Frontend**: React with Fluent UI  
-- **Backend**: Azure Static Web Apps (SWA) with serverless functions
-- **Data Storage**: Dataverse tables and sharepoint lists and libraries
-- **Analytics**: Power BI integration for dashboards and reports
-- **Copilot**: custom agentss for learning assistance and content generation
-- **Graph API**: for user and content management
-- **MSAL**: for authentication and authorisation
-  **SSO**: integrate with Azure AD for single sign-on is a must
-
-## Guidance for AI Agents
-- **No codebase exists yet**: When generating code, follow standard conventions for Azure SWA, React, or chosen stack until project-specific patterns emerge.
-- **Document all new workflows** (build, test, deploy) in this file as you add them.
-- **Reference and update this file** as the architecture, data model, or workflows evolve.
-- **If you add a src/ directory or modules**, describe their purpose and relationships here.
-- **If you introduce dependencies** (npm, pip, etc.), document install/build/test commands here.
-- **Prioritize accessibility and modularity** in all code and UI.
-
-## Example (to update as project evolves)
-- If you add a `src/` directory, describe its structure and main modules here.
-- If you use a tool like `npm`, `pip`, or `dotnet`, document install/build/test commands.
-- Run commands freely if required to set up or test the project, but document them here.
-**Use PNPM or Yarn** for package management. Example commands:**
-```bash 
-pnpm install
-pnpm run build  
-pnpm run test
-```
+## Contribution Guidance
+- Document any new workflows or patterns here as the project evolves
+- If adding new modules or directories, describe their purpose and relationships
+- If introducing new dependencies, document install/build/test commands
 
 ---
-_Update this file as the project develops to ensure AI agents have the context needed for productive contributions._
+_Update this file as the project evolves to ensure AI agents have the context needed for productive contributions._

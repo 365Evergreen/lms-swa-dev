@@ -188,6 +188,14 @@ The app will:
 
 ## User Flow
 
+### Visitor
+
+- Browse available courses so that I can find topics of interest
+- Access blog posts so that I can learn more about topics of interest
+- Access downloable resources so that I can learn more about topics of interest
+- Complete and submit a contact form so that I can connect with HiRed
+- Sign-up to a newsletter
+
 ### Learner
 
 - Browse available courses so that I can find topics of interest

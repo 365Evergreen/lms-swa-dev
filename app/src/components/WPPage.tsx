@@ -62,15 +62,15 @@ const WPPage: React.FC = () => {
       });
   }, [slug]);
 
-  if (loading) return <div style={{ padding: '2rem' }}>Loading...</div>;
-  if (error) return <div style={{ padding: '2rem', color: 'red' }}>Error: {error}</div>;
-  if (!page) return <div style={{ padding: '2rem' }}>Not found</div>;
+  if (loading) return <div className="mainContent">Loading...</div>;
+  if (error) return <div className="mainContent errorText">Error: {error}</div>;
+  if (!page) return <div className="mainContent">Not found</div>;
 
   return (
-    <div style={{ padding: '2rem' }}>
+    <div className="mainContent">
       <h2>{page.title}</h2>
       {page.featuredImage?.node?.sourceUrl && (
-        <img src={page.featuredImage.node.sourceUrl} alt={page.title} style={{ maxWidth: '100%', marginBottom: '1rem' }} />
+        <img src={page.featuredImage.node.sourceUrl} alt={page.title} className="featuredImage" />
       )}
       <div dangerouslySetInnerHTML={{ __html: page.content }} />
     </div>

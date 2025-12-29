@@ -50,27 +50,27 @@ const ContentRouter = () => {
         });
     }, [type]);
     if (loading)
-        return _jsx("div", { style: { padding: '2rem' }, children: "Loading..." });
+        return _jsx("div", { className: "mainContent", children: "Loading..." });
     if (error)
-        return _jsxs("div", { style: { padding: '2rem', color: 'red' }, children: ["Error: ", error] });
+        return _jsxs("div", { className: "mainContent errorText", children: ["Error: ", error] });
     if (!content || !Array.isArray(content) || content.length === 0)
-        return _jsx("div", { style: { padding: '2rem' }, children: "No results found." });
+        return _jsx("div", { className: "mainContent", children: "No results found." });
     // Render results for each type
     if (type === 'courses') {
-        return (_jsxs("div", { style: { padding: '2rem' }, children: [_jsx("h2", { children: "Courses" }), _jsx("ul", { children: content.map((c) => {
+        return (_jsxs("div", { className: "mainContent", children: [_jsx("h2", { children: "Courses" }), _jsx("ul", { children: content.map((c) => {
                         var _a, _b;
-                        return (_jsxs("li", { style: { marginBottom: 24 }, children: [_jsx("h3", { children: c.title }), ((_b = (_a = c.featuredImage) === null || _a === void 0 ? void 0 : _a.node) === null || _b === void 0 ? void 0 : _b.sourceUrl) && (_jsx("img", { src: c.featuredImage.node.sourceUrl, alt: c.title, style: { maxWidth: 200, marginBottom: 8 } })), _jsx("div", { dangerouslySetInnerHTML: { __html: c.content } })] }, c.id));
+                        return (_jsxs("li", { style: { marginBottom: 24 }, children: [_jsx("h3", { children: c.title }), ((_b = (_a = c.featuredImage) === null || _a === void 0 ? void 0 : _a.node) === null || _b === void 0 ? void 0 : _b.sourceUrl) && (_jsx("img", { src: c.featuredImage.node.sourceUrl, alt: c.title, className: "featuredImageSmall" })), _jsx("div", { dangerouslySetInnerHTML: { __html: c.content } })] }, c.id));
                     }) })] }));
     }
     if (type === 'topics') {
-        return (_jsxs("div", { style: { padding: '2rem' }, children: [_jsx("h2", { children: "Topics" }), _jsx("ul", { children: content.map((t) => (_jsx("li", { children: t.title }, t.id))) })] }));
+        return (_jsxs("div", { className: "mainContent", children: [_jsx("h2", { children: "Topics" }), _jsx("ul", { children: content.map((t) => (_jsx("li", { children: t.title }, t.id))) })] }));
     }
     if (type === 'pathways') {
-        return (_jsxs("div", { style: { padding: '2rem' }, children: [_jsx("h2", { children: "Pathways" }), _jsx("ul", { children: content.map((p) => (_jsx("li", { children: p.title }, p.id))) })] }));
+        return (_jsxs("div", { className: "mainContent", children: [_jsx("h2", { children: "Pathways" }), _jsx("ul", { children: content.map((p) => (_jsx("li", { children: p.title }, p.id))) })] }));
     }
     if (type === 'resources') {
-        return (_jsxs("div", { style: { padding: '2rem' }, children: [_jsx("h2", { children: "Resources (eBooks)" }), _jsx("ul", { children: content.map((r) => (_jsx("li", { children: r.title }, r.id))) })] }));
+        return (_jsxs("div", { className: "mainContent", children: [_jsx("h2", { children: "Resources (eBooks)" }), _jsx("ul", { children: content.map((r) => (_jsx("li", { children: r.title }, r.id))) })] }));
     }
-    return _jsx("div", { style: { padding: '2rem' }, children: "Unknown content type." });
+    return _jsx("div", { className: "mainContent", children: "Unknown content type." });
 };
 export default ContentRouter;

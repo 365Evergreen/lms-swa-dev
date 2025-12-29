@@ -1,3 +1,52 @@
+.mainContentWithHeader {
+	padding-top: 80px;
+}
+
+.heroSection {
+	width: 100vw;
+	height: 60vh;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-image: url('https://storagehiredau.blob.core.windows.net/learning/hero-bg.png');
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.heroTitle {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-bottom: 16px;
+	background: rgba(255,255,255,0.85);
+	padding: 0.5em 1em;
+	border-radius: 8px;
+}
+
+.heroSubtitle {
+	font-size: 1.25rem;
+	color: #444;
+	max-width: 600px;
+	text-align: center;
+	background: rgba(255,255,255,0.7);
+	padding: 0.5em 1em;
+	border-radius: 8px;
+}
+.featuredImageSmall {
+	max-width: 200px;
+	margin-bottom: 8px;
+}
+.errorText {
+	color: #c00;
+}
+
+.featuredImage {
+	max-width: 100%;
+	margin-bottom: 1rem;
+}
 /* Fluent UI base font and app-wide styles */
 html, body {
 	font-family: 'Segoe UI', 'SegoeUI', 'Arial', 'sans-serif';
@@ -13,4 +62,9 @@ html, body {
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
+}
+
+/* Main content area padding, used by all pages */
+.mainContent {
+  padding: 2rem;
 }

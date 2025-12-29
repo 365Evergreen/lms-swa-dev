@@ -5,47 +5,33 @@ import Header from './components/fluent/Header';
 import ContentRouter from './components/ContentRouter';
 import WPPage from './components/WPPage';
 
+
 const Hero = () => (
-	<section
-		style={{
-			width: '100vw',
-			height: '60vh',
-			margin: 0,
-			padding: 0,
-			display: 'flex',
-			flexDirection: 'column',
-			alignItems: 'center',
-			justifyContent: 'center',
-			backgroundImage: 'url(https://storagehiredau.blob.core.windows.net/learning/hero-bg.png)',
-			backgroundSize: 'cover',
-			backgroundPosition: 'center',
-			backgroundRepeat: 'no-repeat',
-		}}
-	>
-		<h1 style={{ fontSize: '2.5rem', fontWeight: 700, marginBottom: 16, background: 'rgba(255,255,255,0.85)', padding: '0.5em 1em', borderRadius: 8 }}>
-			Welcome to the Accessible Learning Hub
-		</h1>
-		<p style={{ fontSize: '1.25rem', color: '#444', maxWidth: 600, textAlign: 'center', background: 'rgba(255,255,255,0.7)', padding: '0.5em 1em', borderRadius: 8 }}>
-			Discover accessible, modular learning with analytics and a beautiful, inclusive design.
-		</p>
-	</section>
+  <section className="heroSection">
+    <h1 className="heroTitle">
+      Welcome to the Accessible Learning Hub
+    </h1>
+    <p className="heroSubtitle">
+      Discover accessible, modular learning with analytics and a beautiful, inclusive design.
+    </p>
+  </section>
 );
 
 const App = () => (
-       <>
-	       <Header />
-	       <main style={{ paddingTop: 80 }}>
-		       <Routes>
-			       <Route path="/landing" element={<LandingPage />} />
-			       {/* Dynamic route for content types: /:type/:slug */}
-			       <Route path=":type/:slug" element={<ContentRouter />} />
-			       {/* Dynamic route for WP pages: /parent/slug */}
-			       <Route path=":parent/:slug" element={<WPPage />} />
-			       {/* Fallback route */}
-			       <Route path="/*" element={<Hero />} />
-		       </Routes>
-	       </main>
-       </>
+	<>
+		<Header />
+		<main className="mainContentWithHeader">
+			<Routes>
+				<Route path="/landing" element={<LandingPage />} />
+				{/* Dynamic route for content types: /:type/:slug */}
+				<Route path=":type/:slug" element={<ContentRouter />} />
+				{/* Dynamic route for WP pages: /parent/slug */}
+				<Route path=":parent/:slug" element={<WPPage />} />
+				{/* Fallback route */}
+				<Route path="/*" element={<Hero />} />
+			</Routes>
+		</main>
+	</>
 );
 
 export default App;

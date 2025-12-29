@@ -12,6 +12,6 @@ const Carousel = ({ items, itemsToShow = 1 }) => {
     if (visibleItems.length < itemsToShow) {
         visibleItems.push(...items.slice(0, itemsToShow - visibleItems.length));
     }
-    return (_jsxs("div", { className: styles.carousel, children: [_jsx("button", { className: styles.arrow, onClick: prev, "aria-label": "Previous", children: "\u2190" }), _jsx("div", { className: styles.track, style: { gridTemplateColumns: `repeat(${itemsToShow}, 1fr)` }, children: visibleItems.map((item) => (_jsx("div", { className: styles.item, children: item.content }, item.id))) }), _jsx("button", { className: styles.arrow, onClick: next, "aria-label": "Next", children: "\u2192" })] }));
+    return (_jsxs("div", { className: styles.carousel, children: [_jsx("button", { className: styles.arrow, onClick: prev, "aria-label": "Previous", children: "\u2190" }), _jsx("div", { className: styles.track + ' ' + styles.trackDynamic, "data-items": itemsToShow, children: visibleItems.map((item) => (_jsx("div", { className: styles.item, children: item.content }, item.id))) }), _jsx("button", { className: styles.arrow, onClick: next, "aria-label": "Next", children: "\u2192" })] }));
 };
 export default Carousel;

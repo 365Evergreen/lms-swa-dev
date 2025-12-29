@@ -48,21 +48,21 @@ const ContentRouter: React.FC = () => {
       });
   }, [type]);
 
-  if (loading) return <div style={{ padding: '2rem' }}>Loading...</div>;
-  if (error) return <div style={{ padding: '2rem', color: 'red' }}>Error: {error}</div>;
-  if (!content || !Array.isArray(content) || content.length === 0) return <div style={{ padding: '2rem' }}>No results found.</div>;
+  if (loading) return <div className="mainContent">Loading...</div>;
+  if (error) return <div className="mainContent errorText">Error: {error}</div>;
+  if (!content || !Array.isArray(content) || content.length === 0) return <div className="mainContent">No results found.</div>;
 
   // Render results for each type
   if (type === 'courses') {
     return (
-      <div style={{ padding: '2rem' }}>
+      <div className="mainContent">
         <h2>Courses</h2>
         <ul>
           {content.map((c: any) => (
             <li key={c.id} style={{ marginBottom: 24 }}>
               <h3>{c.title}</h3>
               {c.featuredImage?.node?.sourceUrl && (
-                <img src={c.featuredImage.node.sourceUrl} alt={c.title} style={{ maxWidth: 200, marginBottom: 8 }} />
+                <img src={c.featuredImage.node.sourceUrl} alt={c.title} className="featuredImageSmall" />
               )}
               <div dangerouslySetInnerHTML={{ __html: c.content }} />
             </li>
@@ -73,7 +73,7 @@ const ContentRouter: React.FC = () => {
   }
   if (type === 'topics') {
     return (
-      <div style={{ padding: '2rem' }}>
+      <div className="mainContent">
         <h2>Topics</h2>
         <ul>
           {content.map((t: any) => (
@@ -85,7 +85,7 @@ const ContentRouter: React.FC = () => {
   }
   if (type === 'pathways') {
     return (
-      <div style={{ padding: '2rem' }}>
+      <div className="mainContent">
         <h2>Pathways</h2>
         <ul>
           {content.map((p: any) => (
@@ -97,7 +97,7 @@ const ContentRouter: React.FC = () => {
   }
   if (type === 'resources') {
     return (
-      <div style={{ padding: '2rem' }}>
+      <div className="mainContent">
         <h2>Resources (eBooks)</h2>
         <ul>
           {content.map((r: any) => (
@@ -107,7 +107,7 @@ const ContentRouter: React.FC = () => {
       </div>
     );
   }
-  return <div style={{ padding: '2rem' }}>Unknown content type.</div>;
+  return <div className="mainContent">Unknown content type.</div>;
 };
 
 export default ContentRouter;

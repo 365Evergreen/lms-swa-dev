@@ -53,11 +53,11 @@ const WPPage = () => {
         });
     }, [slug]);
     if (loading)
-        return _jsx("div", { style: { padding: '2rem' }, children: "Loading..." });
+        return _jsx("div", { className: "mainContent", children: "Loading..." });
     if (error)
-        return _jsxs("div", { style: { padding: '2rem', color: 'red' }, children: ["Error: ", error] });
+        return _jsxs("div", { className: "mainContent errorText", children: ["Error: ", error] });
     if (!page)
-        return _jsx("div", { style: { padding: '2rem' }, children: "Not found" });
-    return (_jsxs("div", { style: { padding: '2rem' }, children: [_jsx("h2", { children: page.title }), ((_b = (_a = page.featuredImage) === null || _a === void 0 ? void 0 : _a.node) === null || _b === void 0 ? void 0 : _b.sourceUrl) && (_jsx("img", { src: page.featuredImage.node.sourceUrl, alt: page.title, style: { maxWidth: '100%', marginBottom: '1rem' } })), _jsx("div", { dangerouslySetInnerHTML: { __html: page.content } })] }));
+        return _jsx("div", { className: "mainContent", children: "Not found" });
+    return (_jsxs("div", { className: "mainContent", children: [_jsx("h2", { children: page.title }), ((_b = (_a = page.featuredImage) === null || _a === void 0 ? void 0 : _a.node) === null || _b === void 0 ? void 0 : _b.sourceUrl) && (_jsx("img", { src: page.featuredImage.node.sourceUrl, alt: page.title, className: "featuredImage" })), _jsx("div", { dangerouslySetInnerHTML: { __html: page.content } })] }));
 };
 export default WPPage;

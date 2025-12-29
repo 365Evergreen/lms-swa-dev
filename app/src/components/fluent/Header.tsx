@@ -62,20 +62,6 @@ export default function Header() {
                 className={styles.navLink}
                 tabIndex={menuOpen || typeof window === 'undefined' || window.innerWidth > 900 ? 0 : -1}
                 onClick={e => handleNavClick(e, link.api)}
-                style={{
-                  color: '#0056d6',
-                  textDecoration: 'none',
-                  fontWeight: 500,
-                  padding: '0 18px',
-                  display: 'inline-block',
-                  borderRadius: 4,
-                  background: 'none',
-                  transition: 'background 0.2s',
-                  height: 50,
-                  lineHeight: '50px',
-                }}
-                onMouseOver={e => (e.currentTarget.style.background = 'rgba(12,12,12,0.07)')}
-                onMouseOut={e => (e.currentTarget.style.background = 'none')}
               >
                 {link.label}
               </a>

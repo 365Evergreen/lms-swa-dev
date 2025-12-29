@@ -30,7 +30,10 @@ const Carousel: React.FC<CarouselProps> = ({ items, itemsToShow = 1 }) => {
       <button className={styles.arrow} onClick={prev} aria-label="Previous">
         &#8592;
       </button>
-      <div className={styles.track} style={{ gridTemplateColumns: `repeat(${itemsToShow}, 1fr)` }}>
+      <div
+        className={styles.track + ' ' + styles.trackDynamic}
+        data-items={itemsToShow}
+      >
         {visibleItems.map((item) => (
           <div key={item.id} className={styles.item}>
             {item.content}

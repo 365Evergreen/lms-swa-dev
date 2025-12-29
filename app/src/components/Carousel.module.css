@@ -1,3 +1,11 @@
+.trackDynamic[data-items] {
+  grid-template-columns: repeat(var(--items-to-show, 1), 1fr);
+}
+
+/* Set --items-to-show variable from data-items attribute using JS (see below for usage) */
+.trackDynamic[data-items] {
+  --items-to-show: attr(data-items number);
+}
 .carousel {
   display: flex;
   align-items: center;

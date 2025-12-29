@@ -6,7 +6,7 @@ const LandingPage: React.FC = () => {
   const user = accounts[0];
 
   return (
-    <main style={{ padding: '2rem' }}>
+    <main className="mainContent">
       <h1>Welcome, {user?.name || user?.username || 'User'}!</h1>
       <p>This is your personalized learning dashboard.</p>
       {/* Add more personalized content here */}

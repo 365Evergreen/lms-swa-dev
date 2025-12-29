@@ -1,7 +1,9 @@
 
 
 
+
 import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import styles from './Header.module.css';
 
 // Example nav links with API endpoint for demonstration
@@ -33,9 +35,13 @@ export default function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.logo}>
-        <a href="/" aria-label="Accessible Learning Hub Home">
-          <span className={styles.logoText}>Accessible Learning Hub</span>
-        </a>
+        <NavLink to="/landing" className={styles.headerLogoLink} aria-label="Home">
+          <img
+            src="https://storagehiredau.blob.core.windows.net/learning/HiRED-logo-red-D5xTJQF0.png"
+            alt="Accessible Learning Hub Logo"
+            className={styles.headerLogo}
+          />
+        </NavLink>
       </div>
       <button
         className={styles.hamburger}
@@ -57,14 +63,14 @@ export default function Header() {
         <ul className={styles.navList}>
           {navLinks.map((link) => (
             <li key={link.href}>
-              <a
-                href={link.href}
+              <NavLink
+                to={link.href}
                 className={styles.navLink}
                 tabIndex={menuOpen || typeof window === 'undefined' || window.innerWidth > 900 ? 0 : -1}
                 onClick={e => handleNavClick(e, link.api)}
               >
                 {link.label}
-              </a>
+              </NavLink>
             </li>
           ))}
         </ul>

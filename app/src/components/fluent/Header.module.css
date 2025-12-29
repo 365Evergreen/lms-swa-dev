@@ -3,13 +3,14 @@
 }
 
 /* Public Site Header Styles (Figma/UI.md) */
+
 .header {
   position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
   height: 50px;
-  background: rgba(255,255,255,0.5);
+  background: transparent;
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -29,7 +30,7 @@
 .header-logo {
   position: absolute;
   left: 26px;
-  top: 10px;
+  top: 12px;
   width: 91.23px;
   height: 26px;
   object-fit: contain;
@@ -46,7 +47,7 @@
   flex-direction: row;
   align-items: center;
   height: 48px;
-  background: rgba(255,255,255,0.13);
+  background: transparent;
   border-radius: 10px;
   box-sizing: border-box;
   padding: 0;

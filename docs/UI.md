@@ -1,7 +1,8 @@
 ## 
 
 ### Public site header
-
+![alt text](image-2.png)
+![alt text](image-1.png)
 ![Public site header](image.png)
 
 /* Site header */

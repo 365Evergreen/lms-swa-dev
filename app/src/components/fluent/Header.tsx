@@ -18,12 +18,13 @@ const PARENTS = ['Topics', 'Courses', 'Pathways', 'Community', 'Resources'];
 
 
 const Header: React.FC = () => {
-  const [scrolled, setScrolled] = useState(false);
+	const [scrolled, setScrolled] = useState(false);
 	const [childMenuItems, setChildMenuItems] = useState<MenuItem[] | WPMenuItem[]>([]);
 	const [childrenLoading, setChildrenLoading] = useState(false);
 	const [childrenError, setChildrenError] = useState<string | null>(null);
-  const { instance, accounts } = useMsal();
-  const navigate = useNavigate();
+	const [mobileNavOpen, setMobileNavOpen] = useState(false);
+	const { instance, accounts } = useMsal();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const onScroll = () => {
@@ -86,7 +87,24 @@ const Header: React.FC = () => {
 							className={styles['header-logo']}
 						/>
 					</NavLink>
-					<nav className={styles['header-nav']} aria-label="Main navigation">
+					{/* Hamburger menu icon for mobile */}
+					<button
+						className={styles.hamburger}
+						aria-label={mobileNavOpen ? 'Close menu' : 'Open menu'}
+						aria-expanded={mobileNavOpen}
+						aria-controls="main-nav"
+						onClick={() => setMobileNavOpen((open) => !open)}
+						type="button"
+					>
+						<span className={styles['hamburger-bar']} />
+						<span className={styles['hamburger-bar']} />
+						<span className={styles['hamburger-bar']} />
+					</button>
+					<nav
+						className={mobileNavOpen ? `${styles['header-nav']} open` : styles['header-nav']}
+						aria-label="Main navigation"
+						id="main-nav"
+					>
 						<NavigationMenu.Root orientation="horizontal">
 							<NavigationMenu.List className={styles['header-nav-list']}>
 								{PARENTS.map((parent) => {
@@ -202,8 +220,8 @@ const Header: React.FC = () => {
 								className={styles['header-login-label']}
 								tabIndex={0}
 								role="link"
-								onClick={() => instance.loginRedirect()}
-								onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') instance.loginRedirect(); }}
+								onClick={() => { setMobileNavOpen(false); instance.loginRedirect(); }}
+								onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { setMobileNavOpen(false); instance.loginRedirect(); } }}
 								aria-label="Log in"
 								style={{ cursor: 'pointer', marginLeft: 16 }}
 							>

@@ -16,6 +16,7 @@ const Header = () => {
     const [childMenuItems, setChildMenuItems] = useState([]);
     const [childrenLoading, setChildrenLoading] = useState(false);
     const [childrenError, setChildrenError] = useState(null);
+    const [mobileNavOpen, setMobileNavOpen] = useState(false);
     const { instance, accounts } = useMsal();
     const navigate = useNavigate();
     useEffect(() => {
@@ -61,68 +62,12 @@ const Header = () => {
             });
         }
     }, [accounts]);
-    // If authenticated, redirect to landing page
     useEffect(() => {
         if (accounts && accounts.length > 0) {
             navigate('/landing', { replace: true });
         }
     }, [accounts, navigate]);
-    const [scrolled, setScrolled] = useState(false);
-    const [childMenuItems, setChildMenuItems] = useState([]);
-    const [childrenLoading, setChildrenLoading] = useState(false);
-    const [childrenError, setChildrenError] = useState(null);
-    const { instance, accounts } = useMsal();
-    const navigate = useNavigate();
-    useEffect(() => {
-        const onScroll = () => {
-            setScrolled(window.scrollY > 10);
-        };
-        window.addEventListener('scroll', onScroll);
-        return () => window.removeEventListener('scroll', onScroll);
-    }, []);
-    // Only fetch child menu items after MSAL auth state is known
-    useEffect(() => {
-        if (!Array.isArray(accounts))
-            return; // Wait for MSAL to resolve
-        setChildMenuItems([]);
-        setChildrenError(null);
-        setChildrenLoading(true);
-        if (accounts.length > 0) {
-            // Authenticated: fetch Dataverse menu
-            fetchMenuItems()
-                .then(items => {
-                setChildMenuItems(items);
-                setChildrenLoading(false);
-            })
-                .catch(err => {
-                setChildrenError('Failed to load menu items');
-                setChildrenLoading(false);
-            });
-        }
-        else {
-            // Anonymous: fetch WordPress menu
-            fetchWordPressMenu()
-                .then(items => {
-                setChildMenuItems(items);
-                setChildrenLoading(false);
-            })
-                .catch(err => {
-                setChildrenError(`Failed to load menu items: ${err.message}`);
-                setChildrenLoading(false);
-                if (typeof window !== 'undefined') {
-                    // eslint-disable-next-line no-console
-                    console.error('WPGraphQL menu fetch error:', err);
-                }
-            });
-        }
-    }, [accounts]);
-    // If authenticated, redirect to landing page
-    useEffect(() => {
-        if (accounts && accounts.length > 0) {
-            navigate('/landing', { replace: true });
-        }
-    }, [accounts, navigate]);
-    return (_jsx("header", { className: scrolled ? `${styles.header} ${styles.headerScrolled}` : styles.header, children: _jsxs("div", { className: styles['header-content'], children: [_jsx(NavLink, { to: "/landing", className: styles['header-logo-link'], tabIndex: 0, "aria-label": "Home", children: _jsx("img", { src: hiredLogo, alt: "HiRED logo", className: styles['header-logo'] }) }), _jsxs("nav", { className: styles['header-nav'], "aria-label": "Main navigation", children: [_jsx(NavigationMenu.Root, { orientation: "horizontal", children: _jsx(NavigationMenu.List, { className: styles['header-nav-list'], children: PARENTS.map((parent) => {
+    return (_jsx("header", { className: scrolled ? `${styles.header} ${styles.headerScrolled}` : styles.header, children: _jsxs("div", { className: styles['header-content'], children: [_jsx(NavLink, { to: "/landing", className: styles['header-logo-link'], tabIndex: 0, "aria-label": "Home", children: _jsx("img", { src: hiredLogo, alt: "HiRED logo", className: styles['header-logo'] }) }), _jsxs("button", { className: styles.hamburger, "aria-label": mobileNavOpen ? 'Close menu' : 'Open menu', "aria-expanded": mobileNavOpen, "aria-controls": "main-nav", onClick: () => setMobileNavOpen((open) => !open), type: "button", children: [_jsx("span", { className: styles['hamburger-bar'] }), _jsx("span", { className: styles['hamburger-bar'] }), _jsx("span", { className: styles['hamburger-bar'] })] }), _jsxs("nav", { className: mobileNavOpen ? `${styles['header-nav']} open` : styles['header-nav'], "aria-label": "Main navigation", id: "main-nav", children: [_jsx(NavigationMenu.Root, { orientation: "horizontal", position: "popper", children: _jsx(NavigationMenu.List, { className: styles['header-nav-list'], children: PARENTS.map((parent) => {
                                     if (childrenLoading) {
                                         return (_jsxs(NavigationMenu.Item, { className: styles['header-link'], children: [_jsxs(NavigationMenu.Trigger, { className: styles['header-trigger'], "aria-label": `Show submenu for ${parent}`, children: [_jsx("span", { className: styles['header-trigger-label'], children: parent }), _jsx("span", { className: styles['header-trigger-chevron'], children: _jsx(ChevronDown24Regular, {}) })] }), _jsx(NavigationMenu.Content, { className: styles['megamenu'], children: _jsx("div", { className: styles['megamenu-content'], role: "menu", children: _jsx("div", { className: styles['megamenu-loading'], children: "Loading..." }) }) })] }, parent));
                                     }
@@ -149,6 +94,9 @@ const Header = () => {
                                                                 return (_jsx("li", { className: styles['megamenu-item'], children: _jsxs(NavLink, { to: `/${slug}`, className: styles['megamenu-link'], tabIndex: 0, children: [_jsx("span", { className: styles['megamenu-icon'], children: "\uD83D\uDC4D" }), _jsx("span", { children: item.label ? item.label : 'Menu Item' })] }) }, item.id));
                                                             }) }) }) })] }, parent));
                                     }
-                                }) }) }), (!accounts || accounts.length === 0) && (_jsx("label", { className: styles['header-login-label'], tabIndex: 0, role: "link", onClick: () => instance.loginRedirect(), onKeyDown: e => { if (e.key === 'Enter' || e.key === ' ')
-                                instance.loginRedirect(); }, "aria-label": "Log in", style: { cursor: 'pointer', marginLeft: 16 }, children: "Log in" }))] })] }) }));
+                                }) }) }), (!accounts || accounts.length === 0) && (_jsx("label", { className: styles['header-login-label'], tabIndex: 0, role: "link", onClick: () => { setMobileNavOpen(false); instance.loginRedirect(); }, onKeyDown: e => { if (e.key === 'Enter' || e.key === ' ') {
+                                setMobileNavOpen(false);
+                                instance.loginRedirect();
+                            } }, "aria-label": "Log in", style: { cursor: 'pointer', marginLeft: 16 }, children: "Log in" }))] })] }) }));
 };
+export default Header;

@@ -23,3 +23,4 @@ dist-ssr
 *.sln
 *.sw?
 **/*.js
+app/src/components/fluent/Header.js

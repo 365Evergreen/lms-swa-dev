@@ -105,7 +105,7 @@ const Header: React.FC = () => {
 						aria-label="Main navigation"
 						id="main-nav"
 					>
-						<NavigationMenu.Root orientation="horizontal">
+						  <NavigationMenu.Root orientation="horizontal">
 							<NavigationMenu.List className={styles['header-nav-list']}>
 								{PARENTS.map((parent) => {
 									if (childrenLoading) {

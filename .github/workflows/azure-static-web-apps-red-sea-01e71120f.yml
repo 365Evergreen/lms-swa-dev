@@ -19,7 +19,7 @@ jobs:
         with:
           submodules: true
           lfs: false
-           - name: Set up Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -57,3 +57,4 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets. AZURE_STATIC_WEB_APPS_API_TOKEN_RED_SEA_01E71120F }}
 
           action: "close"
+

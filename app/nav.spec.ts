@@ -1,8 +1,5 @@
 import { test, expect } from '@playwright/test';
 
-// Update this if your dev server runs on a different port
-const BASE_URL = 'http://localhost:5174/';
-
 const NAV_ITEMS = [
   { label: 'Topics', heading: 'Topics' },
   { label: 'Courses', heading: 'Courses' },
@@ -13,7 +10,8 @@ const NAV_ITEMS = [
 
 test.describe('Navigation Bar', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(BASE_URL);
+    // use Playwright `baseURL` from config; navigate relative to it
+    await page.goto('/');
   });
 
   for (const item of NAV_ITEMS) {

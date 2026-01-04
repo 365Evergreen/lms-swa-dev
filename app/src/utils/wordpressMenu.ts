@@ -1,8 +1,6 @@
 // Utility to fetch WordPress menu items via WPGraphQL
-// Adjust the MENU_LOCATION as needed (e.g., 'PRIMARY', 'MAIN', etc.)
-
-const WP_GRAPHQL_ENDPOINT = 'https://thn.chh.mybluehost.me/website_8a441532/graphql';
-const MENU_LOCATION = 'PRIMARY'; // Change to your menu location slug
+// Configure the GraphQL endpoint via Vite env var `VITE_WP_GRAPHQL_ENDPOINT`.
+const WP_GRAPHQL_ENDPOINT = import.meta.env.VITE_WP_GRAPHQL_ENDPOINT || 'https://thn.chh.mybluehost.me/website_8a441532/graphql';
 
 export interface WPMenuItem {
   id: string;

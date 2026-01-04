@@ -1,6 +1,3 @@
-import { test, expect } from '@playwright/test';
-
-const BASE_URL = 'http://localhost:5175/';
 
 const NAV_ITEMS = [
   { label: 'Topics', heading: 'Topics' },
@@ -18,7 +15,7 @@ test.describe('Header Responsiveness', () => {
   ]) {
     test(`should display nav correctly on ${size.name}`, async ({ page }) => {
       await page.setViewportSize({ width: size.width, height: size.height });
-      await page.goto(BASE_URL);
+      await page.goto('/');
       // Hamburger visible on mobile, not on desktop
       const hamburger = page.locator('button[aria-label*="menu"]');
       if (size.name === 'mobile') {

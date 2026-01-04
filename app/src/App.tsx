@@ -22,13 +22,14 @@ const App = () => (
 		<Header />
 		<main className="mainContentWithHeader">
 			<Routes>
+				<Route path="/" element={<Hero />} />
 				<Route path="/landing" element={<LandingPage />} />
-				{/* Dynamic route for content types: /:type/:slug */}
+				{/* Collection pages (Topics, Courses, Pathways, Resources) */}
+				<Route path=":type" element={<ContentRouter />} />
+				{/* Dynamic route for content items: /:type/:slug */}
 				<Route path=":type/:slug" element={<ContentRouter />} />
 				{/* Dynamic route for WP pages: /parent/slug */}
 				<Route path=":parent/:slug" element={<WPPage />} />
-				{/* Fallback route */}
-				<Route path="/*" element={<Hero />} />
 			</Routes>
 		</main>
 	</>

@@ -47,7 +47,7 @@ export default function Header() {
       <div className={styles['header-content']}>
         <div className={styles['header-left']}>
           <div className={styles.logo}>
-            <NavLink to="/landing" className={styles['header-logo-link']} aria-label="Home">
+            <NavLink to="/" className={styles['header-logo-link']} aria-label="Home">
               <img
                 src="https://storagehiredau.blob.core.windows.net/learning/HiRED-logo-red-D5xTJQF0.png"
                 alt="Accessible Learning Hub Logo"

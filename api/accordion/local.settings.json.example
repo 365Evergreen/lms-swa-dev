@@ -1,0 +1,12 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "AZURE_CLIENT_ID": "<your-app-client-id>",
+    "AZURE_CLIENT_SECRET": "<your-app-client-secret-or-use-managed-identity>",
+    "AZURE_TENANT_ID": "<your-tenant-id>",
+    "SOURCE_API_URL": "https://orgXXX.crmX.dynamics.com/api/data/v9.2/hired_lmsmenuitems?$select=hired_name,hired_route,hired_lmsmenuitemid",
+    "SOURCE_SCOPE": "https://orgXXX.crmX.dynamics.com/.default"
+  }
+}

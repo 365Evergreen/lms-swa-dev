@@ -1,0 +1,90 @@
+.contactSection {
+  padding: 4rem 1rem;
+  background: #f7fafb;
+}
+.container {
+  max-width: 980px;
+  margin: 0 auto;
+}
+.title {
+  text-align: center;
+  font-size: 2rem;
+  margin: 0 0 0.5rem 0;
+  color: #0b2436;
+}
+.subtitle {
+  text-align: center;
+  color: #55616b;
+  margin: 0 0 1.5rem 0;
+}
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 6px 20px rgba(10, 20, 30, 0.06);
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 2rem;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+}
+.fieldFull {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+}
+.label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  color: #1f2d3a;
+}
+.req {
+  color: #c53030;
+  margin-left: 0.25rem;
+}
+.input, .select, .textarea {
+  border: 1px solid #e2e8f0;
+  padding: 0.6rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  color: #0b2436;
+}
+.textarea { resize: vertical; }
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+.primary {
+  background: #2b85e4;
+  color: white;
+  border: none;
+  padding: 0.9rem 1.25rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.secondary {
+  background: transparent;
+  color: #1f2d3a;
+  border: 1px solid #cbd5e1;
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.legal {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 800px) {
+  .grid { grid-template-columns: 1fr; }
+  .actions { flex-direction: column; align-items: stretch; }
+  .primary, .secondary { width: 100%; }
+}

@@ -5,6 +5,8 @@ import Header from './components/fluent/Header';
 import ContentRouter from './components/ContentRouter';
 import WPPage from './components/WPPage';
 import Accordion from './components/fluent/Accordion';
+import FeaturesSection from './components/FeaturesSection';
+import ContactForm from './components/ContactForm';
 
 
 const Hero = () => (
@@ -15,7 +17,6 @@ const Hero = () => (
     <p className="heroSubtitle">
       Secure, cost-effective LMS that fits seamlessly into your Microsoft environment—customisable, scalable, and future-ready
     </p>
-		<Accordion />
   </section>
 );
 
@@ -24,7 +25,21 @@ const App = () => (
 		<Header />
 		<main className="mainContentWithHeader">
 			<Routes>
-				<Route path="/" element={<Hero />} />
+				<Route
+					path="/"
+					element={
+						<>
+							<Hero />
+							<FeaturesSection />
+							<section className="homeAccordion">
+								<Accordion />
+							</section>
+							<section className="contactWrapper">
+								<ContactForm />
+							</section>
+						</>
+					}
+				/>
 				<Route path="/landing" element={<LandingPage />} />
 				{/* Collection pages (Topics, Courses, Pathways, Resources) */}
 				<Route path=":type" element={<ContentRouter />} />

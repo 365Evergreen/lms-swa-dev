@@ -32,8 +32,10 @@ const defaultItems: AccordionItem[] = [
   },
 ];
 
-const Accordion: React.FC<Props> = ({ items = defaultItems }) => {
-  const [openId, setOpenId] = useState<string | null>(items[0]?.id ?? null);
+const Accordion: React.FC<Props> = ({ items: initialItems }) => {
+  const starting = initialItems ?? defaultItems;
+  const [items] = useState<AccordionItem[]>(starting);
+  const [openId, setOpenId] = useState<string | null>(starting[0]?.id ?? null);
 
   const toggle = (id: string) => {
     setOpenId((curr) => (curr === id ? null : id));
@@ -63,7 +65,9 @@ const Accordion: React.FC<Props> = ({ items = defaultItems }) => {
               openId === it.id ? `${styles.panel} ${styles.open}` : styles.panel
             }
           >
-            <div className={styles.panelInner} dangerouslySetInnerHTML={{ __html: it.content }} />
+            <div className={styles.panelInner}>
+              <div dangerouslySetInnerHTML={{ __html: it.content }} />
+            </div>
           </div>
         </div>
       ))}

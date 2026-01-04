@@ -4,16 +4,18 @@ import LandingPage from './LandingPage';
 import Header from './components/fluent/Header';
 import ContentRouter from './components/ContentRouter';
 import WPPage from './components/WPPage';
+import Accordion from './components/fluent/Accordion';
 
 
 const Hero = () => (
   <section className="heroSection">
     <h1 className="heroTitle">
-      Welcome to the Accessible Learning Hub
+      HiRed Learning
     </h1>
     <p className="heroSubtitle">
-      Discover accessible, modular learning with analytics and a beautiful, inclusive design.
+      Secure, cost-effective LMS that fits seamlessly into your Microsoft environment—customisable, scalable, and future-ready
     </p>
+		<Accordion />
   </section>
 );
 

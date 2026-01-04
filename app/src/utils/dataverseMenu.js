@@ -15,13 +15,24 @@ export function fetchMenuItems() {
         const dataverseScope = 'https://org05385a1b.crm6.dynamics.com/.default';
         // Acquire token using MSAL
         const account = msalInstance.getAllAccounts()[0];
-        if (!account)
-            throw new Error('No signed-in user');
-        const result = yield msalInstance.acquireTokenSilent({
-            account,
-            scopes: [dataverseScope],
-        });
-        const token = result.accessToken;
+        if (!account) {
+            // No signed-in user - return empty array so UI/tests can continue
+            return [];
+        }
+        let result;
+        try {
+            result = yield msalInstance.acquireTokenSilent({
+                account,
+                scopes: [dataverseScope],
+            });
+        }
+        catch (err) {
+            // Silent acquisition failed - propagate a clear error
+            throw new Error('Failed to acquire Dataverse token: ' + err.message);
+        }
+        const token = result === null || result === void 0 ? void 0 : result.accessToken;
+        if (!token)
+            throw new Error('No access token acquired');
         const response = yield fetch(url, {
             headers: {
                 'Authorization': `Bearer ${token}`,

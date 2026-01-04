@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import styles from './Header.module.css';
 // Example nav links with API endpoint for demonstration
@@ -21,6 +21,16 @@ const navLinks = [
 ];
 export default function Header() {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [isDesktop, setIsDesktop] = useState(false);
+    useEffect(() => {
+        var _a;
+        // determine desktop breakpoint in a safe way and keep it updated
+        const m = window.matchMedia('(min-width: 901px)');
+        const update = () => setIsDesktop(m.matches);
+        update();
+        (_a = m.addEventListener) === null || _a === void 0 ? void 0 : _a.call(m, 'change', update);
+        return () => { var _a; return (_a = m.removeEventListener) === null || _a === void 0 ? void 0 : _a.call(m, 'change', update); };
+    }, []);
     // Responsive: close menu on nav click (mobile)
     const handleNavClick = (e, api) => __awaiter(this, void 0, void 0, function* () {
         setMenuOpen(false);
@@ -34,5 +44,5 @@ export default function Header() {
             }
         }
     });
-    return (_jsx("header", { className: styles.header, children: _jsxs("div", { className: styles['header-content'], children: [_jsx("div", { className: styles.logo, children: _jsx(NavLink, { to: "/landing", className: styles['header-logo-link'], "aria-label": "Home", children: _jsx("img", { src: "https://storagehiredau.blob.core.windows.net/learning/HiRED-logo-red-D5xTJQF0.png", alt: "Accessible Learning Hub Logo", className: styles['header-logo'] }) }) }), _jsxs("button", { className: styles.hamburger, "aria-label": menuOpen ? 'Close navigation menu' : 'Open navigation menu', "aria-expanded": menuOpen, "aria-controls": "main-nav", onClick: () => setMenuOpen((open) => !open), type: "button", children: [_jsx("span", { className: styles.hamburgerBar }), _jsx("span", { className: styles.hamburgerBar }), _jsx("span", { className: styles.hamburgerBar })] }), _jsx("nav", { id: "main-nav", className: menuOpen ? styles.navOpen : styles.nav, "aria-label": "Main navigation", children: _jsx("ul", { className: styles.navList, children: navLinks.map((link) => (_jsx("li", { children: _jsx(NavLink, { to: link.href, className: styles.navLink, tabIndex: menuOpen || typeof window === 'undefined' || window.innerWidth > 900 ? 0 : -1, onClick: e => handleNavClick(e, link.api), children: link.label }) }, link.href))) }) })] }) }));
+    return (_jsx("header", { className: styles.header, children: _jsxs("div", { className: styles['header-content'], children: [_jsxs("div", { className: styles['header-left'], children: [_jsx("div", { className: styles.logo, children: _jsx(NavLink, { to: "/landing", className: styles['header-logo-link'], "aria-label": "Home", children: _jsx("img", { src: "https://storagehiredau.blob.core.windows.net/learning/HiRED-logo-red-D5xTJQF0.png", alt: "Accessible Learning Hub Logo", className: styles['header-logo'] }) }) }), _jsxs("button", { className: styles.hamburger, "aria-label": menuOpen ? 'Close navigation menu' : 'Open navigation menu', "aria-expanded": menuOpen, "aria-controls": "main-nav", onClick: () => setMenuOpen((open) => !open), type: "button", children: [_jsx("span", { className: styles.hamburgerBar }), _jsx("span", { className: styles.hamburgerBar }), _jsx("span", { className: styles.hamburgerBar })] })] }), _jsx("div", { className: styles['header-right'], children: _jsx("nav", { id: "main-nav", className: menuOpen ? styles.navOpen : styles.nav, "aria-label": "Main navigation", children: _jsx("ul", { className: styles.navList, children: navLinks.map((link) => (_jsx("li", { children: _jsx(NavLink, { to: link.href, className: styles.navLink, tabIndex: menuOpen || isDesktop ? 0 : -1, onClick: e => handleNavClick(e, link.api), children: link.label }) }, link.href))) }) }) })] }) }));
 }

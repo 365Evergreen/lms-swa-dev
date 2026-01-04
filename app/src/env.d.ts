@@ -7,8 +7,8 @@ interface ImportMetaEnv {
   readonly VITE_MSAL_AUTHORITY?: string;
   readonly VITE_WP_GRAPHQL_ENDPOINT?: string;
   readonly PLAYWRIGHT_BASE_URL?: string;
-  // allow other envs without errors
-  readonly [key: string]: string | undefined;
+  // allow other envs (strings or booleans from other libs) without errors
+  readonly [key: string]: string | boolean | undefined;
 }
 
 interface ImportMeta {

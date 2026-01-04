@@ -1,5 +1,6 @@
 .mainContentWithHeader {
 	padding-top: 80px;
+	flex: 1; /* allow main to grow so footer sits at bottom when content is short */
 }
 
 .heroSection {

@@ -7,6 +7,7 @@ import WPPage from './components/WPPage';
 import Accordion from './components/fluent/Accordion';
 import FeaturesSection from './components/FeaturesSection';
 import ContactForm from './components/ContactForm';
+import Footer from './components/Footer';
 
 
 const Hero = () => (
@@ -49,6 +50,7 @@ const App = () => (
 				<Route path=":parent/:slug" element={<WPPage />} />
 			</Routes>
 		</main>
+		<Footer />
 	</>
 );
 

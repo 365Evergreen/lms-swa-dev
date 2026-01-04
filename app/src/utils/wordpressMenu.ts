@@ -41,13 +41,15 @@ export async function fetchWordPressMenu(): Promise<WPMenuItem[]> {
     throw new Error('Failed to fetch WordPress menu');
   }
 
-  const { data, errors } = await response.json();
+  const parsed = await response.json();
+  const data = parsed?.data;
+  const errors = parsed?.errors;
   if (errors) {
     throw new Error(errors.map((e: any) => e.message).join(', '));
   }
 
   // Get the first menu's items
-  const menu = data.menus.nodes[0];
-  if (!menu) return [];
-  return menu.menuItems.edges.map((edge: any) => edge.node);
+  const menu = data?.menus?.nodes?.[0];
+  if (!menu || !menu.menuItems?.edges) return [];
+  return menu.menuItems.edges.map((edge: any) => edge.node || null).filter(Boolean);
 }

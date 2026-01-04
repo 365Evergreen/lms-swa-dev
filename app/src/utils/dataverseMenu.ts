@@ -21,12 +21,23 @@ export async function fetchMenuItems(): Promise<MenuItem[]> {
 
   // Acquire token using MSAL
   const account = msalInstance.getAllAccounts()[0];
-  if (!account) throw new Error('No signed-in user');
-  const result = await msalInstance.acquireTokenSilent({
-    account,
-    scopes: [dataverseScope],
-  });
-  const token = result.accessToken;
+  if (!account) {
+    // No signed-in user - return empty array so UI/tests can continue
+    return [];
+  }
+
+  let result;
+  try {
+    result = await msalInstance.acquireTokenSilent({
+      account,
+      scopes: [dataverseScope],
+    });
+  } catch (err) {
+    // Silent acquisition failed - propagate a clear error
+    throw new Error('Failed to acquire Dataverse token: ' + (err as Error).message);
+  }
+  const token = result?.accessToken;
+  if (!token) throw new Error('No access token acquired');
 
   const response = await fetch(url, {
     headers: {

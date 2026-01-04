@@ -12,7 +12,7 @@ const msalConfig: Configuration = {
   auth: {
     clientId,
     authority,
-    redirectUri: window.location.origin,
+    redirectUri: typeof window !== 'undefined' ? window.location.origin : '/',
   },
   cache: {
     cacheLocation: 'localStorage',

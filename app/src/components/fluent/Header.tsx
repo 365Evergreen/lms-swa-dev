@@ -5,6 +5,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import styles from './Header.module.css';
+import AuthModal from './AuthModal';
 
 // Example nav links with API endpoint for demonstration
 const navLinks = [
@@ -19,6 +20,7 @@ const navLinks = [
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   useEffect(() => {
     // determine desktop breakpoint in a safe way and keep it updated
@@ -89,6 +91,17 @@ export default function Header() {
               ))}
             </ul>
           </nav>
+          <div className={styles.loginWrap}>
+            <button
+              className={styles.loginButton}
+              onClick={() => setShowAuthModal(true)}
+              type="button"
+              aria-haspopup="dialog"
+            >
+              Sign in
+            </button>
+          </div>
+          {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
         </div>
       </div>
     </header>
